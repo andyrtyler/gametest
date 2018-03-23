@@ -302,6 +302,7 @@ function onSelected(optMesh) {
   if (!optMesh) {
     return;
   }
+  camera.position.x = 20;
   optMesh.material.opacity = 1;
 }
 
@@ -461,11 +462,7 @@ document.querySelector('button#vr').addEventListener('click', function() {
 });
 
 function enterFullscreen (el) {
-  camera.position.x = 5;
-  camera.position.y = 5;
-  camera.position.z = 5;
-
- /* if (el.requestFullscreen) {
+  if (el.requestFullscreen) {
     el.requestFullscreen();
   } else if (el.mozRequestFullScreen) {
     el.mozRequestFullScreen();
@@ -473,7 +470,7 @@ function enterFullscreen (el) {
     el.webkitRequestFullscreen();
   } else if (el.msRequestFullscreen) {
     el.msRequestFullscreen();
-  }*/
+  }
 }
 
 </script>
