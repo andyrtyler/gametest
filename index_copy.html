@@ -139,6 +139,7 @@ var config = (function() {
                    value === 'false' ? false :
                    parseFloat(value);
   }
+  config[BUFFER_SCALE] = 0.5;
   return config;
 })();
 
@@ -210,7 +211,7 @@ function onLoad() {
   var map = THREE.ImageUtils.loadTexture(mapUrl);
   var material = new THREE.MeshBasicMaterial({ map: map });
   //var material = new THREE.MeshNormalMaterial();
-  cube = new THREE.Mesh(geometry, material);
+ // cube = new THREE.Mesh(geometry, material);
 
   var stepGeometry = new THREE.BoxGeometry(1, 0.05, 1);
 
@@ -294,29 +295,7 @@ function onLoad() {
   window.addEventListener('vrdisplaypresentchange', onResize, true);
 
 setupStage();
-  
 
-  // Initialize the WebVR UI.
- /* var uiOptions = {
-    color: 'black',
-    background: 'white',
-    corners: 'square'
-  };
-  vrButton = new webvrui.EnterVRButton(renderer.domElement, uiOptions);
-  vrButton.on('exit', function() {
-    camera.quaternion.set(0, 0, 0, 1);
-    camera.position.set(0, controls.userHeight, 0);
-  });
-  vrButton.on('hide', function() {
-    document.getElementById('ui').style.display = 'none';
-  });
-  vrButton.on('show', function() {
-    document.getElementById('ui').style.display = 'inherit';
-  });
-  document.getElementById('vr-button').appendChild(vrButton.domElement);
-  document.getElementById('magic-window').addEventListener('click', function() {
-    vrButton.requestEnterFullscreen();
-  });*/
 }
 
 function onSelected(optMesh) {
@@ -363,7 +342,7 @@ function animate(timestamp) {
   lastRenderTime = timestamp;
 
   // Apply rotation to cube mesh
-  cube.rotation.y += delta * 0.0006;
+ // cube.rotation.y += delta * 0.0006;
 
   // Only update controls if we're presenting.
  // if (vrButton.isPresenting()) {
@@ -372,6 +351,7 @@ function animate(timestamp) {
   // Render the scene.
   effect.render(scene, camera);
 
+ //  console.log(camera.position);
 
   if (vrDisplay) {
     vrDisplay.requestAnimationFrame(animate);
@@ -403,6 +383,8 @@ function setupStage() {
       vrDisplay = displays[0];
 
       controls = new THREE.VRControls(camera);
+      controls.standing = true;
+     // camera.position.y = controls.userHeight;
 
       if (vrDisplay.stageParameters) {
         setStageDimensions(vrDisplay.stageParameters);
@@ -411,13 +393,14 @@ function setupStage() {
     } else {
       controls = new THREE.OrbitControls(camera);
       controls.target.set(0, 0, -1);
+   //   controls.standing = true;
 
       // Disable the "Enter VR" button
-    var enterVRButton = document.querySelector('#vr');
-    enterVRButton.disabled = true;
+     var enterVRButton = document.querySelector('#vr');
+     enterVRButton.disabled = true;
   //    controls.target.set(0, 0, -1);
    //   camera.position.y = controls.userHeight;
-      console.log('on a desktop');
+      console.log('on a desktop userHeight = ' + controls.userHeight);
       requestAnimationFrame(animate);
     }
     });  
@@ -478,7 +461,11 @@ document.querySelector('button#vr').addEventListener('click', function() {
 });
 
 function enterFullscreen (el) {
-  if (el.requestFullscreen) {
+  camera.position.x = 5;
+  camera.position.y = 5;
+  camera.position.z = 5;
+
+ /* if (el.requestFullscreen) {
     el.requestFullscreen();
   } else if (el.mozRequestFullScreen) {
     el.mozRequestFullScreen();
@@ -486,7 +473,7 @@ function enterFullscreen (el) {
     el.webkitRequestFullscreen();
   } else if (el.msRequestFullscreen) {
     el.msRequestFullscreen();
-  }
+  }*/
 }
 
 </script>
