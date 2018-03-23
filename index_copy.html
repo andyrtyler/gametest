@@ -35,7 +35,7 @@ canvas {
 
 <body>
   <div id="buttons">
-    <button id="fullscreen">Fullscreen</button>
+    <button id="fullscreen">Fullscreen!</button>
     <button id="vr">VR (WebVR/Mobile only)</button>
   </div>
 </body>
@@ -394,7 +394,7 @@ function setupStage() {
     } else {
       controls = new THREE.OrbitControls(camera);
       controls.target.set(0, 0, -1);
-   //   controls.standing = true;
+      controls.standing = true;
 
       // Disable the "Enter VR" button
      var enterVRButton = document.querySelector('#vr');
