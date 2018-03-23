@@ -112,7 +112,7 @@ canvas {
 -->
 <!-- <script src="nodemodules/webvr-ui.min.js"></script> -->
 
-<!-- <script src="ray-input-master/ray.min.js"></script> -->
+<script src="ray-input-master/ray.min.js"></script>
 
 <!-- OrbitControls.js for controlling camera on desktop.  -->
 <!-- <script src="third_party/three.js/OrbitControls.js"></script> -->
@@ -259,7 +259,7 @@ function onLoad() {
   step6.material.opacity = 0.3;
 
 
- /* rayInput = new RayInput.default(
+  rayInput = new RayInput.default(
       camera, renderer.domElement);
   rayInput.setSize(renderer.getSize());
   console.log('ray input: ' + rayInput + ' .');
@@ -269,7 +269,7 @@ function onLoad() {
   rayInput.on('rayout', this.onDeselected);
   rayInput.on('rayup', this.onDeselected);
   console.log(rayInput.getMesh());
-  scene.add(rayInput.getMesh()); */
+  scene.add(rayInput.getMesh()); 
 
  // scene.add(step);
 
