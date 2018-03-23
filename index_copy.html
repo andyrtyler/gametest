@@ -185,8 +185,9 @@ function onLoad() {
   var aspect = window.innerWidth / window.innerHeight;
   camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
 
-  camera.position.y = 2;
-  camera.position.x = 2;
+  camera.position.y = 3;
+  camera.position.x = 3;
+  camera.position.z = 3;
 
  // controls = new THREE.VRControls(camera);
  // controls.standing = true;
@@ -221,7 +222,7 @@ function onLoad() {
  step.position.set(0, 0, 0);
 
   // Position cube mesh to be right in front of you.
-  //cube.position.set(0, controls.userHeight, -1.5);
+//  cube.position.set(0, controls.userHeight, -1.5);
 
   // Add cube mesh to your three.js scene
  // scene.add(cube);
@@ -372,7 +373,6 @@ function animate(timestamp) {
   effect.render(scene, camera);
 
 
-
   if (vrDisplay) {
     vrDisplay.requestAnimationFrame(animate);
   } else {
@@ -403,7 +403,6 @@ function setupStage() {
       vrDisplay = displays[0];
 
       controls = new THREE.VRControls(camera);
-      //camera.position.y = controls.userHeight;
 
       if (vrDisplay.stageParameters) {
         setStageDimensions(vrDisplay.stageParameters);
@@ -412,7 +411,6 @@ function setupStage() {
     } else {
       controls = new THREE.OrbitControls(camera);
       controls.target.set(0, 0, -1);
-      controls.standing = true;
 
       // Disable the "Enter VR" button
     var enterVRButton = document.querySelector('#vr');
