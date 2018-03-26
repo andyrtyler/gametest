@@ -169,6 +169,10 @@ var rayInput;
 
 var renderer;
 
+var ad1Deal;
+var ad2Deal;
+var ad3Deal;
+var ad4Deal;
 
 function onLoad() {
   // Setup three.js WebGL renderer. Note: Antialiasing is a big performance hit.
@@ -210,20 +214,67 @@ function onLoad() {
   var mapUrl = "ads/ad1.png";
   var map = THREE.ImageUtils.loadTexture(mapUrl);
   var material = new THREE.MeshBasicMaterial({ map: map });
+
+  var ad2map = THREE.ImageUtils.loadTexture("ads/ad2.png");
+  var ad2material = new THREE.MeshBasicMaterial({ map: ad2map });
+
+  var ad3map = THREE.ImageUtils.loadTexture("ads/ad3.png");
+  var ad3material = new THREE.MeshBasicMaterial({ map: ad3map });
+
+  var ad4map = THREE.ImageUtils.loadTexture("ads/ad4.png");
+  var ad4material = new THREE.MeshBasicMaterial({ map: ad4map }); 
+
+  var logoMap = THREE.ImageUtils.loadTexture("images/groupon.jpg");
+  var logoMaterial = new THREE.MeshBasicMaterial({ map: logoMap }); 
   //var material = new THREE.MeshNormalMaterial();
  // cube = new THREE.Mesh(geometry, material);
 
   var stepGeometry = new THREE.BoxGeometry(1, 0.03, 1);
+
+  var logoGeometry = new THREE.BoxGeometry(4.4, 0.03, 3);
+  var dealGeometry = new THREE.BoxGeometry(0.4,0.25,0.02)
 
   step = new THREE.Mesh(stepGeometry, material);
 
   //step = new THREE.Mesh(new THREE.BoxGeometry(0.2,0.2,0.1), material);
  /// step.position.set(2,2,2);
 
- step.position.set(0, 0, -1);
-
+ step.position.set(0, 1.5, -1.5);
  step.rotation.x = 1.57;
+ step.material.transparent = true;
+ step.material.opacity = 0.5;
 
+ var ad1DealMaterial = new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture("ads/ad1deal.png")})
+ ad1Deal = new THREE.Mesh(dealGeometry, ad1DealMaterial);
+ ad1Deal.position.set(0.3, 1.2, -1.2);
+ ad1Deal.material.transparent = true;
+ ad1Deal.material.opacity = 0.1;
+ scene.add(ad1Deal);
+
+ var ad2DealMaterial = new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture("ads/ad2deal.png")})
+ ad2Deal = new THREE.Mesh(dealGeometry, ad2DealMaterial);
+ ad2Deal.position.set(-1.2,1.2,0.3);
+ ad2Deal.rotation.y = 1.57;
+ //ad2Deal.rotation.z = 4.7;
+ ad2Deal.material.transparent = true;
+ ad2Deal.material.opacity = 0.1;
+ scene.add(ad2Deal);
+
+ var ad3DealMaterial = new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture("ads/ad3deal.png")})
+ ad3Deal = new THREE.Mesh(dealGeometry, ad3DealMaterial);
+ ad3Deal.position.set(-0.2,1.2,1.3);
+ ad3Deal.material.transparent = true;
+ ad3Deal.material.opacity = 0.1;
+ scene.add(ad3Deal);
+
+ var ad4DealMaterial = new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture("ads/ad4deal.png")})
+ ad4Deal = new THREE.Mesh(dealGeometry, ad4DealMaterial);
+ ad4Deal.position.set(1.2,1.2,0);
+ ad4Deal.rotation.y = 1.57;
+ //ad2Deal.rotation.z = 4.7;
+ ad4Deal.material.transparent = true;
+ ad4Deal.material.opacity = 0.1;
+ scene.add(ad4Deal);
   // Position cube mesh to be right in front of you.
 //  cube.position.set(0, controls.userHeight, -1.5);
 
@@ -232,42 +283,65 @@ function onLoad() {
 
   scene.add(step);
 
-  var step2 = new THREE.Mesh(stepGeometry, material);
-  step2.position.set(-1,0,0);
+  var step2 = new THREE.Mesh(stepGeometry, ad2material);
+  step2.position.set(-1.5,1.5,0);
   step2.rotation.x = 1.57;
   step2.rotation.z = 4.7;
+  step2.material.transparent = true;
+  step2.material.opacity = 0.5;
+
   scene.add(step2);
 
-  var step3 = new THREE.Mesh(stepGeometry, material);
-  step3.position.set(-2,0,0);
+  var step3 = new THREE.Mesh(stepGeometry, ad3material);
+  step3.position.set(0,1.5,1.5);
+  step3.rotation.x = 1.57;
+  step3.rotation.z = 3.14;
+  step3.material.transparent = true;
+ step3.material.opacity = 0.5;
+
   scene.add(step3);
 
-  var step4 = new THREE.Mesh(stepGeometry, material);
-  step4.position.set(-2,0,1);
+  var step4 = new THREE.Mesh(stepGeometry, ad4material);
+  step4.position.set(1.5,1.5,0);
+  step4.rotation.x = -1.57;
+  step4.rotation.z = -1.57;
+  step4.material.transparent = true;
+ step4.material.opacity = 0.5;
+
   scene.add(step4);
 
-  var step5 = new THREE.Mesh(stepGeometry, material);
-  step5.position.set(-3,0,0);
-  scene.add(step5);
+  var groupon = new THREE.Mesh(logoGeometry, logoMaterial);
+ groupon.position.set(-2, 4.5, -9.5);
+ groupon.rotation.x = 1.57;
+ scene.add(groupon);
 
-  var step7 = new THREE.Mesh(stepGeometry, material);
-  step7.position.set(-3,0,1);
-  scene.add(step7);
+ var groupon2 = new THREE.Mesh(logoGeometry, logoMaterial);
+ groupon2.position.set(2, 4.5, 9.5);
+ groupon2.rotation.x = 1.57;
+ groupon2.rotation.z = 3.14;
+ scene.add(groupon2);
 
-  var endMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+ // var step7 = new THREE.Mesh(stepGeometry, material);
+ // step7.position.set(-3,0,1);
+ // scene.add(step7);
 
-  var step6 = new THREE.Mesh(stepGeometry, endMaterial);
-  step6.position.set(-3,0,-1);
-  scene.add(step6);
-  step6.material.transparent = true;
-  step6.material.opacity = 0.3;
+ // var endMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+
+ // var step6 = new THREE.Mesh(stepGeometry, endMaterial);
+ // step6.position.set(-3,0,-1);
+ // scene.add(step6);
+//  step6.material.transparent = true;
+//  step6.material.opacity = 0.3;
 
 
   rayInput = new RayInput.default(
       camera, renderer.domElement);
   rayInput.setSize(renderer.getSize());
   console.log('ray input: ' + rayInput + ' .');
-  rayInput.add(step6);
+  rayInput.add(step);
+  rayInput.add(step2);
+  rayInput.add(step3);
+  rayInput.add(step4);
   rayInput.on('rayover', this.onSelected);
   rayInput.on('raydown', this.onSelected);
   rayInput.on('rayout', this.onDeselected);
@@ -306,15 +380,22 @@ function onSelected(optMesh) {
   if (!optMesh) {
     return;
   }
-//  camera.position.x = 20;
   optMesh.material.opacity = 1;
+  ad1Deal.material.opacity = 0.9;
+  ad2Deal.material.opacity = 0.9;
+  ad3Deal.material.opacity = 0.9;
+  ad4Deal.material.opacity = 0.9;
 }
 
 function onDeselected(optMesh) {
   if (!optMesh) {
     return;
   }
-  optMesh.material.opacity = 0.3;
+  optMesh.material.opacity = 0.5;
+  ad1Deal.material.opacity = 0.1;
+  ad2Deal.material.opacity = 0.1;
+  ad3Deal.material.opacity = 0.1;
+  ad4Deal.material.opacity = 0.1;
 }
 
 function onTextureLoaded(texture) {
@@ -404,7 +485,7 @@ function setupStage() {
      var enterVRButton = document.querySelector('#vr');
      enterVRButton.disabled = true;
   //    controls.target.set(0, 0, -1);
-   //   camera.position.y = controls.userHeight;
+      camera.position.y = 2.5;
       console.log('on a desktop userHeight = ' + controls.userHeight);
       requestAnimationFrame(animate);
     }
