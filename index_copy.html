@@ -207,9 +207,13 @@ function onLoad() {
 
   // Create 3D objects.
   var geometry = new THREE.BoxGeometry(0.1, 0.5, 0.8);
-  var mapUrl = "images/bluestep.gif";
+  var mapUrl = "images/whitetile.jpg";
   var map = THREE.ImageUtils.loadTexture(mapUrl);
   var material = new THREE.MeshBasicMaterial({ map: map });
+
+  var blackMapUrl = "images/greytile.jpg";
+  var blackMap = THREE.ImageUtils.loadTexture(blackMapUrl);
+  var blackMaterial = new THREE.MeshBasicMaterial({ map: blackMap });
   //var material = new THREE.MeshNormalMaterial();
  // cube = new THREE.Mesh(geometry, material);
 
@@ -230,7 +234,7 @@ function onLoad() {
 
   scene.add(step);
 
-  var step2 = new THREE.Mesh(stepGeometry, material);
+  var step2 = new THREE.Mesh(stepGeometry, blackMaterial);
   step2.position.set(-1,0,0);
   scene.add(step2);
 
@@ -238,11 +242,11 @@ function onLoad() {
   step3.position.set(-2,0,0);
   scene.add(step3);
 
-  var step4 = new THREE.Mesh(stepGeometry, material);
+  var step4 = new THREE.Mesh(stepGeometry, blackMaterial);
   step4.position.set(-2,0,1);
   scene.add(step4);
 
-  var step5 = new THREE.Mesh(stepGeometry, material);
+  var step5 = new THREE.Mesh(stepGeometry, blackMaterial);
   step5.position.set(-3,0,0);
   scene.add(step5);
 
@@ -302,7 +306,7 @@ function onSelected(optMesh) {
   if (!optMesh) {
     return;
   }
-  camera.position.x = 20;
+ // camera.position.x = 20;
   optMesh.material.opacity = 1;
 }
 
