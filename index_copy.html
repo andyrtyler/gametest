@@ -164,6 +164,13 @@ var camera;
 var vrButton;
 
 var step;
+var step2;
+var step3;
+var step4;
+var step5;
+var step7;
+
+var step6;
 
 var rayInput;
 
@@ -235,29 +242,29 @@ function onLoad() {
 
   scene.add(step);
 
-  var step2 = new THREE.Mesh(stepGeometry, blackMaterial);
+  step2 = new THREE.Mesh(stepGeometry, blackMaterial);
   step2.position.set(-1,0,0);
   scene.add(step2);
 
-  var step3 = new THREE.Mesh(stepGeometry, material);
+  step3 = new THREE.Mesh(stepGeometry, material);
   step3.position.set(-2,0,0);
   scene.add(step3);
 
-  var step4 = new THREE.Mesh(stepGeometry, blackMaterial);
+  step4 = new THREE.Mesh(stepGeometry, blackMaterial);
   step4.position.set(-2,0,1);
   scene.add(step4);
 
-  var step5 = new THREE.Mesh(stepGeometry, blackMaterial);
+  step5 = new THREE.Mesh(stepGeometry, blackMaterial);
   step5.position.set(-3,0,0);
   scene.add(step5);
 
-  var step7 = new THREE.Mesh(stepGeometry, material);
+  step7 = new THREE.Mesh(stepGeometry, material);
   step7.position.set(-3,0,1);
   scene.add(step7);
 
   var endMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 
-  var step6 = new THREE.Mesh(stepGeometry, endMaterial);
+  step6 = new THREE.Mesh(stepGeometry, endMaterial);
   step6.position.set(-3,0,-1);
   scene.add(step6);
   step6.material.transparent = true;
@@ -315,7 +322,25 @@ function onSelected(optMesh) {
   if (!optMesh) {
     return;
   }
-  optMesh.position.y = 0.1;
+
+  if (canMoveTo(optMesh)) {
+    optMesh.position.y = 0.1;
+  }
+
+  // if (optMesh == step) {
+  //   console.log('step');
+  //   optMesh.position.y = 0.1;
+  // }
+  // if (optMesh == step2) {
+  //   console.log('step2');
+  //   optMesh.position.y = 0.1;
+  // }
+
+  if (optMesh == step6) {
+    console.log('step6');
+    optMesh.material.opacity = 1;
+  }
+  
  // camera.position.x = 20;
   //optMesh.material.opacity = 1;
 }
@@ -324,8 +349,37 @@ function onDeselected(optMesh) {
   if (!optMesh) {
     return;
   }
-  optMesh.position.y = 0;
- // optMesh.material.opacity = 0.3;
+
+  if (canMoveTo(optMesh)) {
+    optMesh.position.y = 0;
+  }
+
+  // if (optMesh == step) {
+  //   console.log('step');
+  //   optMesh.position.y = 0;
+  // }
+  // if (optMesh == step2) {
+  //   console.log('step2');
+  //   optMesh.position.y = 0;
+  // }
+
+  if (optMesh == step6) {
+    optMesh.material.opacity = 0.3;
+  }
+}
+
+function canMoveTo(optMesh) {
+  if (optMesh == step) {
+    return true;
+  } else if (optMesh == step2) {
+    return true;
+  } else if (optMesh == step3) {
+    return true;
+  } else if (optMesh == step5) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function onTextureLoaded(texture) {
