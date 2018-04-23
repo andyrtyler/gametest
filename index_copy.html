@@ -284,9 +284,9 @@ function onLoad() {
   rayInput.add(step7);
 
   rayInput.on('rayover', this.onSelected);
-  rayInput.on('raydown', this.onSelected);
+  rayInput.on('raydown', this.onTileDown);
   rayInput.on('rayout', this.onDeselected);
-  rayInput.on('rayup', this.onDeselected);
+  rayInput.on('rayup', this.onTileUp);
   console.log(rayInput.getMesh());
   scene.add(rayInput.getMesh()); 
 
@@ -317,6 +317,21 @@ setupStage();
 
 }
 
+function onTileDown(optMesh) {
+  console.log('tile clicked');
+  if (canMoveTo(optMesh)) {
+    optMesh.position.y = 0.3;
+    console.log('YOU CAN MOVE!');
+  }
+}
+
+function onTileUp(optMesh) {
+  if (canMoveTo(optMesh)) {
+    optMesh.position.y = 0.1;
+    console.log("AND UP");
+  }
+}
+
 function onSelected(optMesh) {
   console.log('on selected');
   if (!optMesh) {
@@ -327,17 +342,7 @@ function onSelected(optMesh) {
     optMesh.position.y = 0.1;
   }
 
-  // if (optMesh == step) {
-  //   console.log('step');
-  //   optMesh.position.y = 0.1;
-  // }
-  // if (optMesh == step2) {
-  //   console.log('step2');
-  //   optMesh.position.y = 0.1;
-  // }
-
   if (optMesh == step6) {
-    console.log('step6');
     optMesh.material.opacity = 1;
   }
   
@@ -353,15 +358,6 @@ function onDeselected(optMesh) {
   if (canMoveTo(optMesh)) {
     optMesh.position.y = 0;
   }
-
-  // if (optMesh == step) {
-  //   console.log('step');
-  //   optMesh.position.y = 0;
-  // }
-  // if (optMesh == step2) {
-  //   console.log('step2');
-  //   optMesh.position.y = 0;
-  // }
 
   if (optMesh == step6) {
     optMesh.material.opacity = 0.3;
