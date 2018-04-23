@@ -225,6 +225,7 @@ function onLoad() {
  /// step.position.set(2,2,2);
 
  step.position.set(0, 0, 0);
+ step.material.transparent = true;
 
   // Position cube mesh to be right in front of you.
 //  cube.position.set(0, controls.userHeight, -1.5);
@@ -268,6 +269,13 @@ function onLoad() {
   rayInput.setSize(renderer.getSize());
   console.log('ray input: ' + rayInput + ' .');
   rayInput.add(step6);
+  rayInput.add(step);
+  rayInput.add(step2);
+  rayInput.add(step3);
+  rayInput.add(step4);
+  rayInput.add(step5);
+  rayInput.add(step7);
+
   rayInput.on('rayover', this.onSelected);
   rayInput.on('raydown', this.onSelected);
   rayInput.on('rayout', this.onDeselected);
@@ -303,18 +311,21 @@ setupStage();
 }
 
 function onSelected(optMesh) {
+  console.log('on selected');
   if (!optMesh) {
     return;
   }
+  optMesh.position.y = 0.1;
  // camera.position.x = 20;
-  optMesh.material.opacity = 1;
+  //optMesh.material.opacity = 1;
 }
 
 function onDeselected(optMesh) {
   if (!optMesh) {
     return;
   }
-  optMesh.material.opacity = 0.3;
+  optMesh.position.y = 0;
+ // optMesh.material.opacity = 0.3;
 }
 
 function onTextureLoaded(texture) {
