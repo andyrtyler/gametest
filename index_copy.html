@@ -284,9 +284,9 @@ function onLoad() {
   rayInput.add(step7);
 
   rayInput.on('rayover', this.onSelected);
-  rayInput.on('raydown', this.onTileDown);
+ // rayInput.on('raydown', this.onTileDown);
   rayInput.on('rayout', this.onDeselected);
-  rayInput.on('rayup', this.onTileUp);
+ // rayInput.on('rayup', this.onTileUp);
   console.log(rayInput.getMesh());
   scene.add(rayInput.getMesh()); 
 
