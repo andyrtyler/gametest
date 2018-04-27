@@ -214,11 +214,13 @@ function onLoad() {
 
   // Create 3D objects.
   var geometry = new THREE.BoxGeometry(0.1, 0.5, 0.8);
-  var mapUrl = "images/whitetile.jpg";
+  //var mapUrl = "images/whitetile.jpg";
+  var mapUrl = "images/david.jpg";
   var map = THREE.ImageUtils.loadTexture(mapUrl);
   var material = new THREE.MeshBasicMaterial({ map: map });
 
-  var blackMapUrl = "images/greytile.jpg";
+  //var blackMapUrl = "images/greytile.jpg";
+  var blackMapUrl = "images/fabien.jpg";
   var blackMap = THREE.ImageUtils.loadTexture(blackMapUrl);
   var blackMaterial = new THREE.MeshBasicMaterial({ map: blackMap });
   //var material = new THREE.MeshNormalMaterial();
