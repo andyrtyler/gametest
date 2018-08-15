@@ -3,6 +3,25 @@
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
   </head>
   <body>
+    <script>
+      AFRAME.registerComponent('cursor-listener', {
+  init: function () {
+    var lastIndex = -1;
+    var COLORS = ['red', 'green', 'blue'];
+    this.el.addEventListener('mouseenter', function (evt) {
+      lastIndex = (lastIndex + 1) % COLORS.length;
+      this.setAttribute('material', 'color', 'blue');
+      console.log('I was clicked at: ', evt.detail.intersection.point);
+    });
+
+    this.el.addEventListener('mouseleave', function (evt) {
+      lastIndex = (lastIndex + 1) % COLORS.length;
+      this.removeAttribute('material', 'color');
+      console.log('I was clicked at: ', evt.detail.intersection.point);
+    });
+  }
+});
+    </script>
     <a-scene>
       <a-box position="-1 0.2 -3" height="0.05" rotation="0 45 0" material="src: greytile.jpg;"></a-box>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
@@ -10,13 +29,18 @@
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
 
+      <a-entity id="box" cursor-listener geometry="primitive: box" position="2 2 -3" material="color: blue"></a-entity>
 
-      <a-box position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
 
-      <a-entity position="0 2 0">
+
+      <a-box cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+
+      <a-entity position="0 1.6 0">
       <a-camera>
         <a-cursor></a-cursor>
       </a-camera>
