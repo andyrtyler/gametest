@@ -4,43 +4,80 @@
   </head>
   <body>
     <script>
+      var tiles = ["box1", "box2", "box3", "box4", "box5", "box6", "box7", "box8", "box9", "box10", "box11", "box12", "box13", "box14", "box15"];
+
+      for (tile in tiles) {
+        console.log('A tile: ' + tiles[tile]);
+      }
+
+
       AFRAME.registerComponent('cursor-listener', {
   init: function () {
-    var lastIndex = -1;
-    var COLORS = ['red', 'green', 'blue'];
+    
     this.el.addEventListener('mouseenter', function (evt) {
-      lastIndex = (lastIndex + 1) % COLORS.length;
-      this.setAttribute('material', 'color', 'blue');
-      console.log('I was clicked at: ', evt.detail.intersection.point);
+    //  console.log("entering " + evt.target.id);
+
+      for (tile in tiles) {
+        if (evt.target.id == tiles[tile]) {
+          document.getElementById(tiles[tile]).setAttribute('material', 'color', 'blue');
+        } else {
+          document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+        }
+      }
+
+     // console.log('I was clicked at: ', evt.detail.intersection.point);
     });
 
     this.el.addEventListener('mouseleave', function (evt) {
-      lastIndex = (lastIndex + 1) % COLORS.length;
+    //  console.log("leaving " + evt.target.id);
       this.removeAttribute('material', 'color');
+      
+    });
+
+    this.el.addEventListener('click', function (evt) {
+      console.log(evt.target.getAttribute('position'));
+
+      var position = evt.target.getAttribute('position');
+
+      var cameraPosition = {};
+      cameraPosition['x'] = position['x'];
+      cameraPosition['y'] = '1.6';
+      cameraPosition['z'] = position['z'];
+
       console.log('I was clicked at: ', evt.detail.intersection.point);
+      document.getElementById('camera-entity').setAttribute('position', cameraPosition);
     });
   }
 });
     </script>
     <a-scene>
-      <a-box position="-1 0.2 -3" height="0.05" rotation="0 45 0" material="src: greytile.jpg;"></a-box>
+      
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
 
-      <a-entity id="box" cursor-listener geometry="primitive: box" position="2 2 -3" material="color: blue"></a-entity>
+     
+
+      <a-box id="box1" cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box2" cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box3" cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box4" cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box5" cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box6" cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box7" cursor-listener position="-3 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box8" cursor-listener position="-3 0.5 -4" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box9" cursor-listener position="-3 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box10" cursor-listener position="-2 0.5 -5" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box11" cursor-listener position="-1 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box12" cursor-listener position="-1 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box13" cursor-listener position="-2 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box id="box14" cursor-listener position="-3 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box id="box15" cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg; color: purple;"></a-box>
 
 
 
-      <a-box cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-
-      <a-entity position="0 1.6 0">
+      <a-entity id='camera-entity' position="0 1.6 0">
       <a-camera>
         <a-cursor></a-cursor>
       </a-camera>
