@@ -43,9 +43,17 @@
       cameraPosition['x'] = position['x'];
       cameraPosition['y'] = '1.6';
       cameraPosition['z'] = position['z'];
+      newPositionString = position['x'] + ' 1.6 ' + position['z'];
 
       console.log('I was clicked at: ', evt.detail.intersection.point);
-      document.getElementById('camera-entity').setAttribute('position', cameraPosition);
+
+      var anim = document.createElement('a-animation');
+      anim.setAttribute('attribute', 'position');
+      anim.setAttribute('dur', '1000');
+      anim.setAttribute('easing', 'linear');
+      anim.setAttribute('to', newPositionString);
+      document.getElementById('camera-test').appendChild(anim);
+      //document.getElementById('camera-entity').setAttribute('position', cameraPosition);
     });
   }
 });
@@ -74,12 +82,17 @@
       <a-box id="box15" cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
 
       <a-entity id='camera-entity' position="0 1.6 0">
-      <a-camera>
+      <a-camera id='camera-test'>
+   <!--     <a-animation attribute="position"
+                dur="8000"
+                easing="linear"
+                to="0 1.6 -10"></a-animation> -->
         <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat">
-  </a-entity>
+
+        </a-entity>
       </a-camera>
       </a-entity>
     </a-scene>
