@@ -59,12 +59,15 @@
 });
     </script>
     <a-scene>
-      
+      <a-assets>
+        <a-asset-item id="saucer-obj" src="saucer.obj" ></a-asset-item>
+      </a-assets>
+      <a-entity obj-model="obj: #saucer-obj; " position="-0.35 1.5 -1.0" scale="0.2 0.2 0.2" ></a-entity>
       <a-sphere position="-4 0.75 -6" radius="0.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="0 0.75 -4" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
-
+      
       <a-box id="box1" cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
       <a-box id="box2" cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
       <a-box id="box3" cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
