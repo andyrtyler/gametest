@@ -36,10 +36,16 @@
         scene.add(light);
         scene.add(new THREE.AmbientLight(0xffffff,0.5))
 
+        let mapUrl = "images/whitetile.jpg";
+        var map = THREE.ImageUtils.loadTexture(mapUrl);
+        var material = new THREE.MeshBasicMaterial({ map: map });
+
         // Make a red cube
         let cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(1,1,1),
-            new THREE.MeshLambertMaterial({color:'red'})
+            // new THREE.MeshLambertMaterial({color:'red'}
+            material
+            )
         );
         cube.position.set(0, 1.5, -10);
         scene.add(cube);
