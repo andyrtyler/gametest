@@ -27,7 +27,7 @@
 
         // Make a camera. note that far is set to 100, which is better for realworld sized environments
         let camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 1.6, 3);
+        camera.position.set(0, 3.6, 3);
         scene.add(camera);
 
         // Add some lights
@@ -43,6 +43,14 @@
         );
         cube.position.set(0, 1.5, -10);
         scene.add(cube);
+
+        // Make a blue cube
+        let cube2 = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(1,1,1),
+            new THREE.MeshLambertMaterial({color:'blue'})
+        );
+        cube2.position.set(3, 1.5, -10);
+        scene.add(cube2);
 
         // Make a renderer that fills the screen
         let renderer = new THREE.WebGLRenderer({antialias: true});
