@@ -21,14 +21,15 @@
         import { VRButton } from 'https://unpkg.com/three/examples/jsm/webxr/VRButton.js';
 
         let level1 = {
-          config: {start: [0,0], end: [1,4]},
+          config: {start: [0,0], end: [2,4]},
           steps: [
             [0, 0],
-            [0, 1],
-            [0, 2],
-            [1, 2],
-            [1, 3],
-            [1, 4],
+            [1, 0],
+            [2, 0],
+            [2, -1],
+            [2, -2],
+            [2, -3],
+            [2, -4],
           ],     
         };
 
@@ -46,7 +47,7 @@
 
         // Make a camera. note that far is set to 100, which is better for realworld sized environments
         let camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 3.6, 3);
+        camera.position.set(0, 2, 0);
         scene.add(camera);
 
         // Add some lights
@@ -60,7 +61,7 @@
             new THREE.BoxBufferGeometry(1,1,1),
             new THREE.MeshLambertMaterial({color:'red'})
         );
-        cube.position.set(0, 1.5, -10);
+        cube.position.set(0, 3, 0);
         scene.add(cube);
 
         // Make a blue cube
@@ -73,13 +74,13 @@
 
         for (let i = 0; i < level1.steps.length; i++) {
         	let step = new THREE.Mesh(
-                new THREE.BoxBufferGeometry(0.8,0.1,0.8),
+                new THREE.BoxBufferGeometry(0.9,0.1,0.9),
                 new THREE.MeshLambertMaterial({color:'yellow'})
             );
             let x = level1.steps[i][0];
             let z = level1.steps[i][1];
-            console.log("creating a new step at " + x + ", 10, " + (z + 14));
-            step.position.set(x, 3, z);
+            console.log("creating a new step at " + x + ", 10, " + z);
+            step.position.set(x, 0, z);
 
             scene.add(step);
         }
