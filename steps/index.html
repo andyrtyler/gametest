@@ -20,6 +20,25 @@
         // Import the default VRButton
         import { VRButton } from 'https://unpkg.com/three/examples/jsm/webxr/VRButton.js';
 
+        let level1 = {
+          config: {start: [0,0], end: [1,4]},
+          steps: [
+            [0, 0],
+            [0, 1],
+            [0, 2],
+            [1, 2],
+            [1, 3],
+            [1, 4],
+          ],     
+        };
+
+        console.log("start x = " + level1.config.start[0]);
+        console.log("start y = " + level1.config.start[1]);
+
+        for (let i = 0; i < level1.steps.length; i++) {
+        	console.log("Step " + i + " = " + level1.steps[i]);
+        }
+
         // Make a new scene
         let scene = new THREE.Scene();
         // Set background color of the scene to gray
@@ -51,6 +70,19 @@
         );
         cube2.position.set(3, 1.5, -10);
         scene.add(cube2);
+
+        for (let i = 0; i < level1.steps.length; i++) {
+        	let step = new THREE.Mesh(
+                new THREE.BoxBufferGeometry(0.8,0.1,0.8),
+                new THREE.MeshLambertMaterial({color:'yellow'})
+            );
+            let x = level1.steps[i][0];
+            let z = level1.steps[i][1];
+            console.log("creating a new step at " + x + ", 10, " + (z + 14));
+            step.position.set(x, 3, z);
+
+            scene.add(step);
+        }
 
         // Make a renderer that fills the screen
         let renderer = new THREE.WebGLRenderer({antialias: true});
