@@ -3,7 +3,7 @@
 <head>
 	<script type="text/javascript" src="levels.js"></script>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>STEPS!</title>
     <style type="text/css">
         body {
             margin: 0;
@@ -17,12 +17,11 @@
 <body>
 	<audio id="scream" src="scream.mp3" type="audio/mpeg"></audio>
     <script type="module">
-    	console.log("run native js");
         // Import three
         import * as THREE from 'https://unpkg.com/three/build/three.module.js';
         // Import the default VRButton
         import { VRButton } from 'https://unpkg.com/three/examples/jsm/webxr/VRButton.js';
-        import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+        //import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
 
         
 
@@ -42,7 +41,7 @@
         camera.position.set(0, 2, 0);
         scene.add(camera);
 
-        let controls = new OrbitControls(camera, document.body);
+        //let controls = new OrbitControls(camera, document.body);
 
         // Add some lights
         var light = new THREE.DirectionalLight(0xffffff,0.5);
@@ -84,7 +83,7 @@
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         // Turn on VR support
-        renderer.vr.enabled = true;
+        renderer.xr.enabled = true;
         // Set animation loop
         renderer.setAnimationLoop(render);
         // Add canvas to the page
