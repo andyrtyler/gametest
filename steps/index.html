@@ -22,6 +22,7 @@
         // Import the default VRButton
         import { VRButton } from 'https://unpkg.com/three/examples/jsm/webxr/VRButton.js';
         //import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+        import { OrbitControls } from './OrbitControls.js';
 
         
 
@@ -41,7 +42,7 @@
         camera.position.set(0, 2, 0);
         scene.add(camera);
 
-        //let controls = new OrbitControls(camera, document.body);
+        let controls = new OrbitControls(camera, document.body);
 
         // Add some lights
         var light = new THREE.DirectionalLight(0xffffff,0.5);
