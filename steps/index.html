@@ -108,9 +108,6 @@
 
 
         
-
-
-        // I commented this out to do the rayinput stuff above....
         let controller = renderer.xr.getController(0);
         controller.addEventListener('select', onSelect);
         controller.addEventListener('connected', function (event) {
@@ -128,21 +125,7 @@
         // Handle browser resize
         window.addEventListener('resize', onWindowResize, false);
 
-        function onSelected(optMesh) {
-          console.log('on selected');
-          if (!optMesh) {
-            return;
-          }
-          console.log('selected mesh = ' + optMesh);
-        }
-
-        function onDeselected(optMesh) {
-          console.log('on deselected');
-          if (!optMesh) {
-            return;
-          }
-          console.log('deselected mesh = ' + optMesh);
-        }
+        
 
 
         function onWindowResize() {
@@ -156,6 +139,7 @@
         	let geometry, material;
             console.log("data: " + data);
         	switch (data.targetRayMode) {
+
 
         		case 'tracked-pointer':
         		    geometry = new THREE.BufferGeometry();
@@ -172,10 +156,15 @@
         }
 
         function onSelect() {
-          
+            let rayCaster = new THREE.Raycaster();
+            rayCaster.set(camera.getWorldPosition(), camera.getWorldDirection());
+            var intersects = raycaster.intersectObjects(scene.children);
+            consoleLog("Number of intersects: " + intersects.length);
             console.log('on select');
-        	document.getElementById('scream').play();
-
+            if (intersects.length > 0) {
+              document.getElementById('scream').play();  
+            }
+        	
         }
 
         function consoleLog(string) {
