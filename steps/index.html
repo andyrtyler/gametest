@@ -48,12 +48,17 @@
         var light = new THREE.DirectionalLight(0xffffff,0.5);
         light.position.set(1, 1, 1).normalize();
         scene.add(light);
-        scene.add(new THREE.AmbientLight(0xffffff,0.5))
+        scene.add(new THREE.AmbientLight(0xffffff,0.5));
+
+
+        var chessUrl = "chess.jpg";
+        var map = THREE.ImageUtils.loadTexture(chessUrl);
+        var chessMaterial = new THREE.MeshBasicMaterial({ map: map });
 
         // Make a red cube
         let cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(1,1,1),
-            new THREE.MeshLambertMaterial({color:'red'})
+            chessMaterial,
         );
         cube.position.set(0, 3, 0);
         scene.add(cube);
