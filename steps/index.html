@@ -105,7 +105,7 @@
      //   scene.add(rayInput.getMesh()); 
 
 
-        consoleLog('testtttt');
+        consoleLog('xxxx');
         
 
         // Add a button to enter/exit vr to the page
@@ -160,8 +160,10 @@
         	}
         }
 
-        function onSelect() {
+        function onSelect(event) {
+            console.log('OnSelect. Event = ' + JSON.stringify(event));
             let rayCaster = new THREE.Raycaster();
+            console.log('camera.getWorldPosition: ' + camera.getWorldPosition());
             rayCaster.set(camera.getWorldPosition(), camera.getWorldDirection());
             var intersects = raycaster.intersectObjects(scene.children);
             consoleLog("Number of intersects: " + intersects.length);
