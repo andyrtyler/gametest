@@ -13,23 +13,25 @@
       AFRAME.registerComponent('raycaster-listener', {
         init: function() {
           this.el.addEventListener('raycaster-intersected', function(evt) {
-            for (tile in tiles) {
+            this.el.setAttribute('material', 'color', 'blue');
+            /*for (tile in tiles) {
               if (evt.target.id == tiles[tile]) {
                 document.getElementById(tiles[tile]).setAttribute('material', 'color', 'blue');
               } else {
                 document.getElementById(tiles[tile]).removeAttribute('material', 'color');
               }
-            }
+            }*/
           });
 
           this.el.addEventListener('raycaster-intersected-cleared', function(evt) {
-            for (tile in tiles) {
+            this.el.removeAttribute('material', 'color');
+            /*for (tile in tiles) {
               if (evt.target.id == tiles[tile]) {
                 document.getElementById(tiles[tile]).setAttribute('material', 'color', 'red');
               } else {
                 document.getElementById(tiles[tile]).removeAttribute('material', 'color');
               }
-            }
+            }*/
           });
         }
       });
