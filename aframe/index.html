@@ -59,8 +59,12 @@
 });
     </script>
     <a-scene>
-      <a-entity oculus-touch-controls="hand: left"></a-entity>
-<a-entity oculus-touch-controls="hand: right"></a-entity>
+      <a-entity oculus-touch-controls="hand: left">
+        <a-entity laser-controls="hand: left" raycaster="far: 2"></a-entity>
+      </a-entity>
+      <a-entity oculus-touch-controls="hand: right">
+        <a-entity laser-controls raycaster="far: 4"></a-entity>
+      </a-entity>
       <a-assets>
         <a-asset-item id="saucer-obj" src="saucernormals.obj" ></a-asset-item>
         <a-asset-item id="saucer-mtl" src="saucernormals.mtl"></a-asset-item>
