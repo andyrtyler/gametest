@@ -59,12 +59,7 @@
 });
     </script>
     <a-scene>
-      <a-entity oculus-touch-controls="hand: left">
-        <a-entity laser-controls="hand: left" raycaster="far: 2"></a-entity>
-      </a-entity>
-      <a-entity oculus-touch-controls="hand: right">
-        <a-entity laser-controls raycaster="far: 4"></a-entity>
-      </a-entity>
+      
       <a-assets>
         <a-asset-item id="saucer-obj" src="saucernormals.obj" ></a-asset-item>
         <a-asset-item id="saucer-mtl" src="saucernormals.mtl"></a-asset-item>
@@ -103,14 +98,20 @@
 
       <a-entity id='camera-entity' position="0 1.6 0">
       <a-camera id='camera-test'>
+        <a-entity oculus-touch-controls="hand: left">
+          <a-entity laser-controls="hand: left" raycaster="far: 2"></a-entity>
+        </a-entity>
+        <a-entity oculus-touch-controls="hand: right">
+          <a-entity laser-controls raycaster="far: 4"></a-entity>
+        </a-entity>
    <!--     <a-animation attribute="position"
                 dur="8000"
                 easing="linear"
                 to="0 1.6 -10"></a-animation> -->
-        <a-entity cursor="fuse: false; fuseTimeout: 500"
+     <!--   <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
-            material="color: black; shader: flat">
+            material="color: black; shader: flat"> -->
 
         </a-entity>
       </a-camera>
