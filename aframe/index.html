@@ -59,6 +59,13 @@
 });
     </script>
     <a-scene>
+
+      <a-entity oculus-touch-controls="hand: left">
+          <a-entity hand-controls laser-controls="hand: left" raycaster="far: 2; showLine: true"></a-entity>
+        </a-entity>
+        <a-entity oculus-touch-controls="hand: right">
+          <a-entity hand-controls laser-controls="hand: right" raycaster="far: 2; showLine: true"></a-entity>
+        </a-entity>
       
       <a-assets>
         <a-asset-item id="saucer-obj" src="saucernormals.obj" ></a-asset-item>
@@ -98,12 +105,7 @@
 
       <a-entity id='camera-entity' position="0 1.6 0">
       <a-camera id='camera-test'>
-        <a-entity oculus-touch-controls="hand: left">
-          <a-entity laser-controls="hand: left" raycaster="far: 2"></a-entity>
-        </a-entity>
-        <a-entity oculus-touch-controls="hand: right">
-          <a-entity laser-controls raycaster="far: 4"></a-entity>
-        </a-entity>
+        
    <!--     <a-animation attribute="position"
                 dur="8000"
                 easing="linear"
