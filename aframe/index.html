@@ -10,6 +10,30 @@
         console.log('A tile: ' + tiles[tile]);
       }
 
+      AFRAME.registerComponent('raycaster-listener', {
+        init: function() {
+          this.el.addEventListener('raycaster-intersected', function(evt) {
+            for (tile in tiles) {
+              if (evt.target.id == tiles[tile]) {
+                document.getElementById(tiles[tile]).setAttribute('material', 'color', 'blue');
+              } else {
+                document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+              }
+            }
+          });
+
+          this.el.addEventListener('raycaster-intersected-cleared', function(evt) {
+            for (tile in tiles) {
+              if (evt.target.id == tiles[tile]) {
+                document.getElementById(tiles[tile]).setAttribute('material', 'color', 'red');
+              } else {
+                document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+              }
+            }
+          });
+        }
+      });
+
 
       AFRAME.registerComponent('cursor-listener', {
   init: function () {
@@ -61,10 +85,10 @@
     <a-scene>
 
       <a-entity position="0 1.6 0">      
-          <a-entity laser-controls="hand: left" raycaster="far: 2;"></a-entity>
+          <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
         
     
-          <a-entity laser-controls="hand: right" raycaster="far: 5;"></a-entity>
+          <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
       </a-entity>
       
       <a-assets>
@@ -87,21 +111,21 @@
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
       
-      <a-box id="box1" cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box2" cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box3" cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box4" cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box5" cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box6" cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box7" cursor-listener position="-3 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box8" cursor-listener position="-3 0.5 -4" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box9" cursor-listener position="-3 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box10" cursor-listener position="-2 0.5 -5" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box11" cursor-listener position="-1 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box12" cursor-listener position="-1 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box13" cursor-listener position="-2 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box id="box14" cursor-listener position="-3 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box id="box15" cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box1" raycaster-listener cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box2" raycaster-listener cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box3" raycaster-listener cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box4" raycaster-listener cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box5" raycaster-listener cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box6" raycaster-listener cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box7" raycaster-listener cursor-listener position="-3 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box8" raycaster-listener cursor-listener position="-3 0.5 -4" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box9" raycaster-listener cursor-listener position="-3 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box10" raycaster-listener cursor-listener position="-2 0.5 -5" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box11" raycaster-listener cursor-listener position="-1 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box12" raycaster-listener cursor-listener position="-1 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box13" raycaster-listener cursor-listener position="-2 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="box14" raycaster-listener cursor-listener position="-3 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="box15" raycaster-listener cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
 
       <a-entity id='camera-entity' position="0 1.6 0">
       <a-camera id='camera-test'>
