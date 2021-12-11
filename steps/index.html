@@ -51,8 +51,8 @@
         scene.add(new THREE.AmbientLight(0xffffff,0.5));
 
 
-        var chessUrl = "chess.jpg";
-        var map = THREE.ImageUtils.loadTexture(chessUrl);
+        var evsUrl = "evs.jpg";
+        var map = THREE.ImageUtils.loadTexture(evsUrl);
         var chessMaterial = new THREE.MeshBasicMaterial({ map: map });
 
         // Make a red cube
@@ -62,6 +62,18 @@
         );
         cube.position.set(0, 3, 0);
         scene.add(cube);
+
+        var zigUrl = "zig.jpg";
+        var map = THREE.ImageUtils.loadTexture(zigUrl);
+        var zigMaterial = new THREE.MeshBasicMaterial({ map: map });
+
+        // Make a red cube
+        let zig = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(1,1,1),
+            zigMaterial,
+        );
+        zig.position.set(2, 3, 0);
+        scene.add(zig);
 
         // Make a blue cube
         let cube2 = new THREE.Mesh(
@@ -184,6 +196,9 @@
             // Rotate the cube
             cube.rotation.y = time / 1000;
             cube.rotation.z = time / 500;
+
+            zig.rotation.x = time / 1000;
+            zig.rotation.y = time / 500;
             // Draw everything
             renderer.render(scene, camera);
         }
