@@ -3,6 +3,7 @@
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
   </head>
   <body>
+    <audio id="scream" src="scream.mp3" type="audio/mpeg"></audio>
     <script>
       var tiles = ["box1", "box2", "box3", "box4", "box5", "box6", "box7", "box8", "box9", "box10", "box11", "box12", "box13", "box14", "box15"];
 
@@ -33,6 +34,12 @@
               }
             }*/
           });
+
+          this.el.addEventListener('click', function (evt) {
+            document.getElementById('scream').play();
+          });
+
+
         }
       });
 
@@ -61,7 +68,8 @@
     });
 
     this.el.addEventListener('click', function (evt) {
-      console.log(evt.target.getAttribute('position'));
+      document.getElementById('scream').play();
+      console.log('Clicked item position: ' + evt.target.getAttribute('position'));
 
       var position = evt.target.getAttribute('position');
 
