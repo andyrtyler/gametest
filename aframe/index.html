@@ -13,38 +13,42 @@
   </head>
   <body>
     <audio id="scream" src="scream.mp3" type="audio/mpeg"></audio>
+    <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
-      var tiles = ["box1", "box2", "box3", "box4", "box5", "box6", "box7", "box8", "box9", "box10", "box11", "box12", "box13", "box14", "box15"];
-
-      for (tile in tiles) {
-        console.log('A tile: ' + tiles[tile]);
-      }
+   
+      let tiles = [];
 
       AFRAME.registerComponent('raycaster-listener', {
         init: function() {
           this.el.addEventListener('raycaster-intersected', function(evt) {
-            this.el.setAttribute('material', 'color', 'blue');
-            /*for (tile in tiles) {
+            console.log('intersected element with id: ' + evt.target.id);
+            //this.el.setAttribute('material', 'color', 'blue');
+            for (tile in tiles) {
               if (evt.target.id == tiles[tile]) {
                 document.getElementById(tiles[tile]).setAttribute('material', 'color', 'blue');
               } else {
-                document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+              
+             //   document.getElementById(tiles[tile]).removeAttribute('material', 'color');
               }
-            }*/
+            }
           });
 
           this.el.addEventListener('raycaster-intersected-cleared', function(evt) {
-            this.el.removeAttribute('material', 'color');
-            /*for (tile in tiles) {
+            console.log('intersect cleared element with id: ' + evt.target.id);
+           // this.el.removeAttribute('material', 'color');
+             for (tile in tiles) {
               if (evt.target.id == tiles[tile]) {
-                document.getElementById(tiles[tile]).setAttribute('material', 'color', 'red');
-              } else {
                 document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+                
+              } else {
+                
+               // document.getElementById(tiles[tile]).removeAttribute('material', 'color');
               }
-            }*/
+            }
           });
 
           this.el.addEventListener('click', function (evt) {
+            console.log('raycaster-listener click');
             document.getElementById('scream').play();
           });
 
@@ -77,7 +81,8 @@
     });
 
     this.el.addEventListener('click', function (evt) {
-      document.getElementById('scream').play();
+      console.log('cursor-listener click');
+      document.getElementById('snare').play();
       console.log('Clicked item position: ' + evt.target.getAttribute('position'));
 
       var position = evt.target.getAttribute('position');
@@ -101,7 +106,7 @@
   }
 });
     </script>
-    <a-scene>
+    <a-scene id="scene">
 
       <a-entity position="0 1.6 0">      
           <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
@@ -129,23 +134,23 @@
       <a-cylinder position="0 0.75 -4" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
-      
-      <a-box class="clickable" id="box1" raycaster-listener cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box2" raycaster-listener cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box3" raycaster-listener cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box4" raycaster-listener cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box5" raycaster-listener cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box6" raycaster-listener cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box7" raycaster-listener cursor-listener position="-3 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box8" raycaster-listener cursor-listener position="-3 0.5 -4" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box9" raycaster-listener cursor-listener position="-3 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box10" raycaster-listener cursor-listener position="-2 0.5 -5" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box11" raycaster-listener cursor-listener position="-1 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box12" raycaster-listener cursor-listener position="-1 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box13" raycaster-listener cursor-listener position="-2 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="box14" raycaster-listener cursor-listener position="-3 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="box15" raycaster-listener cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
-
+     <!-- 
+      <a-box class="clickable" id="abox1" raycaster-listener cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox2" raycaster-listener cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox3" raycaster-listener cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox4" raycaster-listener cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox5" raycaster-listener cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox6" raycaster-listener cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox7" raycaster-listener cursor-listener position="-3 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox8" raycaster-listener cursor-listener position="-3 0.5 -4" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox9" raycaster-listener cursor-listener position="-3 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox10" raycaster-listener cursor-listener position="-2 0.5 -5" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox11" raycaster-listener cursor-listener position="-1 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox12" raycaster-listener cursor-listener position="-1 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox13" raycaster-listener cursor-listener position="-2 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
+      <a-box class="clickable" id="abox14" raycaster-listener cursor-listener position="-3 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
+      <a-box class="clickable" id="abox15" raycaster-listener cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
+-->
       <a-entity id='camera-entity' position="0 1.6 0">
       <a-camera id='camera-test'>
         
@@ -162,5 +167,52 @@
       </a-camera>
       </a-entity>
     </a-scene>
+
+    <script>
+      let player = {x: 0, z: 0};
+      const floorLevel = 0.5;
+
+      let steps = [
+        {x: 0, z: 0, id: "box1"},
+        {x: 0, z: -1, id: "box2"},
+        {x: 0, z: -2, id: "box3"},
+        {x: 0, z: -3, id: "box4"},
+        {x: -1, z: -3, id: "box5"},
+        {x: -2, z: -3, id: "box6"},
+        {x: -3, z: -3, id: "box7"},
+        {x: -3, z: -4, id: "box8"},
+        {x: -3, z: -5, id: "box9"},
+        {x: -2, z: -5, id: "box10"},
+        {x: -1, z: -5, id: "box11"},
+        {x: -1, z: -6, id: "box12"},
+        {x: -2, z: -6, id: "box13"},
+        {x: -3, z: -6, id: "box14"},
+        {x: -4, z: -6, id: "box15"},
+      ];
+
+      let scene = document.getElementById('scene');
+
+      for (num in steps) {
+        let step = steps[num];
+        console.log('step = ' + step);
+        let id = "box" + num;
+        
+        let aTile = document.createElement('a-box');
+        aTile.setAttribute('id', id);
+        tiles.push(id);
+        aTile.setAttribute('class', 'clickable');
+        aTile.setAttribute('material', 'src: greytile.jpg;');
+        aTile.setAttribute('height', '0.05');
+        aTile.setAttribute('raycaster-listener', "");
+        aTile.setAttribute('cursor-listener', "");
+        const position = step.x + ' ' + floorLevel + ' ' + step.z;
+        console.log('position = ' + position);
+        aTile.setAttribute('position', position);
+        scene.appendChild(aTile);
+      }
+
+      
+      
+    </script>
   </body>
 </html>
