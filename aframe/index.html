@@ -16,7 +16,16 @@
     <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
    
+      let player = {x: 0, z: 0};
       let tiles = [];
+
+      function isInline(tile) {
+         console.log("is inline: " + tile.id + ": " + tile.x + ", " + tile.z);
+         // TODO: Updat thie to check there is a row between... 
+         if (player.x === tile.x || player.z === tile.z) {
+          console.log('this is inline');
+         }
+      } 
 
       AFRAME.registerComponent('raycaster-listener', {
         init: function() {
@@ -24,8 +33,9 @@
             console.log('intersected element with id: ' + evt.target.id);
             //this.el.setAttribute('material', 'color', 'blue');
             for (tile in tiles) {
-              if (evt.target.id == tiles[tile]) {
-                document.getElementById(tiles[tile]).setAttribute('material', 'color', 'blue');
+              if (evt.target.id == tiles[tile].id) {
+                document.getElementById(tiles[tile].id).setAttribute('material', 'color', 'blue');
+                isInline(tiles[tile]);
               } else {
               
              //   document.getElementById(tiles[tile]).removeAttribute('material', 'color');
@@ -37,8 +47,8 @@
             console.log('intersect cleared element with id: ' + evt.target.id);
            // this.el.removeAttribute('material', 'color');
              for (tile in tiles) {
-              if (evt.target.id == tiles[tile]) {
-                document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+              if (evt.target.id == tiles[tile].id) {
+                document.getElementById(tiles[tile].id).removeAttribute('material', 'color');
                 
               } else {
                 
@@ -64,10 +74,10 @@
     //  console.log("entering " + evt.target.id);
 
       for (tile in tiles) {
-        if (evt.target.id == tiles[tile]) {
-          document.getElementById(tiles[tile]).setAttribute('material', 'color', 'blue');
+        if (evt.target.id == tiles[tile].id) {
+          document.getElementById(tiles[tile].id).setAttribute('material', 'color', 'blue');
         } else {
-          document.getElementById(tiles[tile]).removeAttribute('material', 'color');
+          document.getElementById(tiles[tile].id).removeAttribute('material', 'color');
         }
       }
 
@@ -134,6 +144,24 @@
       <a-cylinder position="0 0.75 -4" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
+
+      <a-box raycaster-listener cursor-listener class="clickable" id="evert" material="src: evs.jpg;" position="0 2 -5" rotation="0 45 45" scale="1 1 1" 
+      animation="property: object3D.position.y; to: 6; dir: alternate; dur: 3000; loop: true"
+      animation="property: object3D.rotation.y; to: 0.8; dir: alternate; dur: 500; loop: true"></a-box>
+
+      <a-box raycaster-listener cursor-listener class="clickable" id="elmo" material="src: elmo.jpg;" position="-2 4 -2" rotation="0 45 45" scale="1 1 1" 
+      animation="property: object3D.position.y; to: 3; dir: alternate; dur: 900; loop: true"
+      animation="property: object3D.rotation.y; to: 0.8; dir: alternate; dur: 500; loop: true"></a-box>
+
+      <a-box raycaster-listener cursor-listener class="clickable" id="lils" material="src: lils.jpg;" position="1 4 -2" rotation="0 45 45" scale="1 1 1" 
+      animation="property: object3D.position.y; to: 3; dir: alternate; dur: 1200; loop: true"
+      animation="property: object3D.rotation.y; to: 0.8; dir: alternate; dur: 500; loop: true"></a-box>
+
+      <a-box raycaster-listener cursor-listener class="clickable" id="arley" material="src: arley.jpg;" position="4 6 -3" rotation="0 0 45" scale="1 1 1" 
+      animation="property: object3D.position.y; to: 3; dir: alternate; dur: 500; loop: true"
+      animation="property: object3D.rotation.y; to: 0.8; dir: alternate; dur: 500; loop: true"></a-box>
+
+     
      <!-- 
       <a-box class="clickable" id="abox1" raycaster-listener cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
       <a-box class="clickable" id="abox2" raycaster-listener cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
@@ -169,28 +197,33 @@
     </a-scene>
 
     <script>
-      let player = {x: 0, z: 0};
+      
       const floorLevel = 0.5;
 
       let steps = [
-        {x: 0, z: 0, id: "box1"},
-        {x: 0, z: -1, id: "box2"},
-        {x: 0, z: -2, id: "box3"},
-        {x: 0, z: -3, id: "box4"},
-        {x: -1, z: -3, id: "box5"},
-        {x: -2, z: -3, id: "box6"},
-        {x: -3, z: -3, id: "box7"},
-        {x: -3, z: -4, id: "box8"},
-        {x: -3, z: -5, id: "box9"},
-        {x: -2, z: -5, id: "box10"},
-        {x: -1, z: -5, id: "box11"},
-        {x: -1, z: -6, id: "box12"},
-        {x: -2, z: -6, id: "box13"},
-        {x: -3, z: -6, id: "box14"},
-        {x: -4, z: -6, id: "box15"},
+        {x: 0, z: 0},
+        {x: 0, z: -1},
+        {x: 0, z: -2},
+        {x: 0, z: -3},
+        {x: -1, z: -3},
+        {x: -2, z: -3},
+        {x: -3, z: -3},
+        {x: -3, z: -4},
+        {x: -3, z: -5},
+        {x: -2, z: -5},
+        {x: -1, z: -5},
+        {x: -1, z: -6},
+        {x: -2, z: -6},
+        {x: -3, z: -6},
+        {x: -4, z: -6},
       ];
 
       let scene = document.getElementById('scene');
+
+      tiles.push({x: 0, z: 0, id: 'evert'});
+      tiles.push({x: 0, z: 0, id: 'arley'});
+      tiles.push({x: 0, z: 0, id: 'elmo'});
+      tiles.push({x: 0, z: 0, id: 'lils'});
 
       for (num in steps) {
         let step = steps[num];
@@ -199,9 +232,15 @@
         
         let aTile = document.createElement('a-box');
         aTile.setAttribute('id', id);
-        tiles.push(id);
+        tiles.push({x: step.x, z: step.z, id: id});
         aTile.setAttribute('class', 'clickable');
-        aTile.setAttribute('material', 'src: greytile.jpg;');
+        if ((step.x + step.z) % 2 == 0) {
+          aTile.setAttribute('material', 'src: greytile.jpg;');
+        } else {
+          aTile.setAttribute('material', 'src: whitetile.jpg;');
+
+        }
+        //aTile.setAttribute('material', 'src: greytile.jpg;');
         aTile.setAttribute('height', '0.05');
         aTile.setAttribute('raycaster-listener', "");
         aTile.setAttribute('cursor-listener', "");
