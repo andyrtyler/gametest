@@ -53,7 +53,8 @@
             let newX = ((tileDestination.x - player.x) * toMove) + player.x;
             let newZ = ((tileDestination.z - player.z) * toMove) + player.z;
          //   let newZ = player.z + (toMove * tileDestination.z);
-            document.getElementById('camera-entity').setAttribute('position', newX + ' 0 ' + newZ);
+            document.getElementById('camera-entity').setAttribute('position', newX + ' 1.6 ' + newZ);
+            document.getElementById('controls').setAttribute('position', newX + ' 1.6 ' + newZ);
 
             if (time - timeClicked >= timePerTile) {
               moving = false;
@@ -173,7 +174,7 @@
     </script>
     <a-scene id="scene" updater>
 
-      <a-entity position="0 1.6 0">      
+      <a-entity id='controls' position="0 1.6 0">      
           <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
         
     
@@ -184,16 +185,16 @@
         <a-asset-item id="saucer-obj" src="saucernormals.obj" ></a-asset-item>
         <a-asset-item id="saucer-mtl" src="saucernormals.mtl"></a-asset-item>
       </a-assets>
-      <a-entity obj-model="obj: #saucer-obj; mtl: #saucer-mtl" scale="0.2 0.2 0.2" >
+      <a-entity obj-model="obj: #saucer-obj; mtl: #saucer-mtl" scale="0.2 0.2 0.2" position="3 2 -4" >
        
-        <a-entity position="5 0 0"></a-entity>
+       
         <a-animation attribute="rotation"
                dur="1000"
                fill="forwards"
                to="0 360 0"
                easing="linear"
                repeat="indefinite"></a-animation>
-               <a-animation attribute="position" from="1 1 1" to="2 4 -8" repeat="indefinite"></a-animation>
+              
       </a-entity>
       <a-sphere position="-4 0.75 -6" radius="0.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="0 0.75 -4" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
@@ -238,12 +239,12 @@
         <a-camera id='camera-test'>
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-        <!--  <a-entity cursor="fuse: false; fuseTimeout: 500"
+       <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
 
-          </a-entity> -->
+          </a-entity> 
         </a-camera>
       </a-entity>
     </a-scene>
