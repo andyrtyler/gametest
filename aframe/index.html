@@ -16,7 +16,7 @@
     <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
    
-      let timePerTile = 1000;      
+      let timePerTile = 800;  
 
       let player = {x: 0, z: 0};
       let tiles = [];
@@ -27,7 +27,7 @@
       let tileDestination = {x: -4, z: -6};
 
       function isInline(tile) {
-         console.log("is inline: " + tile.id + ": " + tile.x + ", " + tile.z);
+         console.log("is inline?: " + tile.id + ": " + tile.x + ", " + tile.z);
          // TODO: Updat thie to check there is a row between... 
          if (player.x === tile.x || player.z === tile.z) {
           console.log('this is inline');
@@ -52,19 +52,49 @@
             console.log('i should be moving!');
             let diff = time - timeClicked;
             let toMove = diff / timePerTile;
-            let newX = ((tileDestination.x - player.x) * toMove) + player.x;
-            let newZ = ((tileDestination.z - player.z) * toMove) + player.z;
-         //   let newZ = player.z + (toMove * tileDestination.z);
+  
+            let xDirection;
+            if (tileDestination.x > player.x) {
+              xDirection = 1;
+            } else if (tileDestination.x == player.x) {
+              xDirection = 0;
+            } else {
+              xDirection = -1;
+            }
+
+            let zDirection;
+            if (tileDestination.z > player.z) {
+              zDirection = 1;
+            } else if (tileDestination.z == player.z) {
+              zDirection = 0;
+            } else {
+              zDirection = -1;
+            }
+
+            let xSpeed = (tileDestination.x - player.x) * xDirection;
+
+            let zSpeed = (tileDestination.z - player.z) * zDirection;
+            console.log('xspeed = ' + xSpeed + ', zspeed='  + zSpeed+ ', zDirection=' + zDirection);
+
+           // let newX = ((tileDestination.x - player.x) * toMove) + player.x;
+           // let newZ = ((tileDestination.z - player.z) * toMove) + player.z;
+
+         //  let newX = (xDirection * speed * diff )  + player.x;
+         //  let newZ = (zDirection * speed * diff )  + player.z;
+
+            let newX = (xDirection * toMove) + player.x;
+            let newZ = (zDirection * toMove) + player.z;
+       
             document.getElementById('camera-entity').setAttribute('position', newX + ' 1.6 ' + newZ);
             document.getElementById('controls').setAttribute('position', newX + ' 1.6 ' + newZ);
 
-            if (time - timeClicked >= timePerTile) {
+            let finishedDiff = (tileDestination.x - player.x) + (tileDestination.z - player.z); 
+
+
+            if (time - timeClicked >= (timePerTile * Math.max(xSpeed, zSpeed))) {
               moving = false;
               player.x = tileDestination.x;
               player.z = tileDestination.z;
-
-           //   tileDestination.x = 1;
-            //  tileDestination.z = 1;
             } 
           }
 
