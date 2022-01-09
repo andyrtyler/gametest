@@ -31,7 +31,9 @@
          // TODO: Updat thie to check there is a row between... 
          if (player.x === tile.x || player.z === tile.z) {
           console.log('this is inline');
+          return true;
          }
+         return false;
       } 
 
       AFRAME.registerComponent('updater', {
@@ -82,9 +84,9 @@
             console.log('intersected element with id: ' + evt.target.id);
             //this.el.setAttribute('material', 'color', 'blue');
             for (tile in tiles) {
-              if (evt.target.id == tiles[tile].id) {
+              if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
                 document.getElementById(tiles[tile].id).setAttribute('material', 'color', 'blue');
-                isInline(tiles[tile]);
+             
               } else {
               
              //   document.getElementById(tiles[tile]).removeAttribute('material', 'color');
@@ -108,10 +110,11 @@
 
           this.el.addEventListener('click', function (evt) {
             console.log('raycaster-listener click');
-            document.getElementById('scream').play();
-            moveRequested = true;
+            
             for (tile in tiles) {
-              if (evt.target.id == tiles[tile].id) {
+              if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
+                document.getElementById('scream').play();
+                moveRequested = true;
                 tileDestination.x = tiles[tile].x;
                 tileDestination.z = tiles[tile].z;
               }
@@ -128,9 +131,10 @@
     
     this.el.addEventListener('mouseenter', function (evt) {
     //  console.log("entering " + evt.target.id);
+    console.log('cursor-listener mouseenter');
 
       for (tile in tiles) {
-        if (evt.target.id == tiles[tile].id) {
+        if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
           document.getElementById(tiles[tile].id).setAttribute('material', 'color', 'blue');
         } else {
           document.getElementById(tiles[tile].id).removeAttribute('material', 'color');
@@ -141,6 +145,7 @@
     });
 
     this.el.addEventListener('mouseleave', function (evt) {
+      console.log('cursor-listener mouseleave')
     //  console.log("leaving " + evt.target.id);
       this.removeAttribute('material', 'color');
       
@@ -148,7 +153,7 @@
 
     this.el.addEventListener('click', function (evt) {
       console.log('cursor-listener click');
-      document.getElementById('snare').play();
+     // document.getElementById('snare').play();
       console.log('Clicked item position: ' + evt.target.getAttribute('position'));
 
       var position = evt.target.getAttribute('position');
@@ -161,13 +166,7 @@
 
       console.log('I was clicked at: ', evt.detail.intersection.point);
 
-      var anim = document.createElement('a-animation');
-      anim.setAttribute('attribute', 'position');
-      anim.setAttribute('dur', '1000');
-      anim.setAttribute('easing', 'linear');
-      anim.setAttribute('to', newPositionString);
-      document.getElementById('camera-test').appendChild(anim);
-      //document.getElementById('camera-entity').setAttribute('position', cameraPosition);
+      
     });
   }
 });
