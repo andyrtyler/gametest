@@ -24,17 +24,57 @@
       let moveRequested = false;
       let timeClicked;
 
-      let tileDestination = {x: -4, z: -6};
+      let tileDestination = {x:0, z:0};
 
       function isInline(tile) {
          console.log("is inline?: " + tile.id + ": " + tile.x + ", " + tile.z);
-         // TODO: Updat thie to check there is a row between... 
+         // TODO: Update this to take into account whether there is actually tiles all the way up to the destination tile.  
          if (player.x === tile.x || player.z === tile.z) {
           console.log('this is inline');
           return true;
          }
          return false;
+      }
+
+      function printBelowTile(x, z) {
+
+    /*    for (num in steps) {
+          let step = steps[num];
+          let minX = step.x - 0.5;
+          let maxX = step.x + 0.5;
+          let minZ = step.z - 0.5;
+          let maxZ = step.z + 0.5;
+
+          if (x > minX && x < maxX && z > minZ && z < maxZ) {
+            console.log('Current below tile = ' + num);
+            removeTile(num);
+          }
+        }*/
+
+        for (num in tiles) {
+          let tile = tiles[num];
+          let minX = tile.x - 0.5;
+          let maxX = tile.x + 0.5;
+          let minZ = tile.z - 0.5;
+          let maxZ = tile.z + 0.5;
+        
+
+          if (x > minX && x < maxX && z > minZ && z < maxZ) {
+            console.log('Current below tile = ' + num);
+            removeTile(tile);
+          }
+        }
+
       } 
+
+      function removeTile(tile) {
+        // TODO do this slowly over time rather than instantly
+        let tileElem = document.getElementById(tile.id);
+        if (tileElem) {
+          tile.status = 'dead';
+          tileElem.remove();
+        }
+      }
 
       AFRAME.registerComponent('updater', {
 
@@ -42,6 +82,8 @@
           if (moveRequested && !moving) {
             console.log('move has been requested');
             moving = true;
+
+            // Reset moveRequested back to false
             moveRequested = false;
             timeClicked = time;
             console.log('player = ' + player.x + ',' + player.z);
@@ -49,7 +91,7 @@
           }
 
           if (moving) {
-            console.log('i should be moving!');
+            //console.log('i should be moving!');
             let diff = time - timeClicked;
             let toMove = diff / timePerTile;
   
@@ -74,7 +116,7 @@
             let xSpeed = (tileDestination.x - player.x) * xDirection;
 
             let zSpeed = (tileDestination.z - player.z) * zDirection;
-            console.log('xspeed = ' + xSpeed + ', zspeed='  + zSpeed+ ', zDirection=' + zDirection);
+            //console.log('xspeed = ' + xSpeed + ', zspeed='  + zSpeed+ ', zDirection=' + zDirection);
 
            // let newX = ((tileDestination.x - player.x) * toMove) + player.x;
            // let newZ = ((tileDestination.z - player.z) * toMove) + player.z;
@@ -84,6 +126,8 @@
 
             let newX = (xDirection * toMove) + player.x;
             let newZ = (zDirection * toMove) + player.z;
+
+            printBelowTile(newX, newZ);
        
             document.getElementById('camera-entity').setAttribute('position', newX + ' 1.6 ' + newZ);
             document.getElementById('controls').setAttribute('position', newX + ' 1.6 ' + newZ);
@@ -108,6 +152,7 @@
         }
       });
 
+     
       AFRAME.registerComponent('raycaster-listener', {
         init: function() {
           this.el.addEventListener('raycaster-intersected', function(evt) {
@@ -155,7 +200,7 @@
         }
       });
 
-
+      // This listens to the retical when you are viewing the page on desktop (and presumably on Android web aswell)
       AFRAME.registerComponent('cursor-listener', {
   init: function () {
     
@@ -164,6 +209,7 @@
     console.log('cursor-listener mouseenter');
 
       for (tile in tiles) {
+        if (tiles[tile].status == 'dead') continue;
         if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
           document.getElementById(tiles[tile].id).setAttribute('material', 'color', 'blue');
         } else {
@@ -314,7 +360,7 @@
         
         let aTile = document.createElement('a-box');
         aTile.setAttribute('id', id);
-        tiles.push({x: step.x, z: step.z, id: id});
+        tiles.push({x: step.x, z: step.z, id: id, status: 'live'});
         aTile.setAttribute('class', 'clickable');
         if ((step.x + step.z) % 2 == 0) {
           aTile.setAttribute('material', 'src: greytile.jpg;');
