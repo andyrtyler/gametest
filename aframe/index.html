@@ -16,11 +16,13 @@
     <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
    
-      let timePerTile = 800;  
+      let timePerTile = 800;
+      let timeTilDead = 1500;  
 
       let player = {x: 0, z: 0};
       let tiles = [];
       let moving = false;
+      let gameRunning = true;
       let moveRequested = false;
       let timeClicked;
 
@@ -36,20 +38,7 @@
          return false;
       }
 
-      function printBelowTile(x, z) {
-
-    /*    for (num in steps) {
-          let step = steps[num];
-          let minX = step.x - 0.5;
-          let maxX = step.x + 0.5;
-          let minZ = step.z - 0.5;
-          let maxZ = step.z + 0.5;
-
-          if (x > minX && x < maxX && z > minZ && z < maxZ) {
-            console.log('Current below tile = ' + num);
-            removeTile(num);
-          }
-        }*/
+      function printBelowTile(x, z, time) {
 
         for (num in tiles) {
           let tile = tiles[num];
@@ -60,18 +49,36 @@
         
 
           if (x > minX && x < maxX && z > minZ && z < maxZ) {
-            console.log('Current below tile = ' + num);
-            removeTile(tile);
+            console.log('Current below tile num = ' + num);
+            console.log('Current below tile id = ' + tile.id);
+            removeTile(tile, time);
           }
         }
 
       } 
 
-      function removeTile(tile) {
+      function getCurrentBelowTile(x, z) {
+        for (num in tiles) {
+          let tile = tiles[num];
+          let minX = tile.x - 0.5;
+          let maxX = tile.x + 0.5;
+          let minZ = tile.z - 0.5;
+          let maxZ = tile.z + 0.5;
+        
+
+          if (x > minX && x < maxX && z > minZ && z < maxZ) {
+            console.log('getCurrent below tile. id = ' + tile.id + ', status = ' + tile.status);
+            return tile;
+          }
+        }
+      }
+
+      function removeTile(tile, time) {
         // TODO do this slowly over time rather than instantly
         let tileElem = document.getElementById(tile.id);
         if (tileElem) {
           tile.status = 'dead';
+          tile.timeDead = time;
           tileElem.remove();
         }
       }
@@ -79,6 +86,21 @@
       AFRAME.registerComponent('updater', {
 
         tick: function(time, timeDelta) {
+          if (!gameRunning) {
+            return;
+          }
+
+          if (!moving) {
+             let currentBelowTile = getCurrentBelowTile(player.x, player.z);
+              if (currentBelowTile.status == 'dead' && time > (currentBelowTile.timeDead + timeTilDead) && currentBelowTile.id != 'box0') {
+                document.getElementById('scream').play();
+                console.log("GAME OVER!! at tile: " + currentBelowTile.id);
+                gameRunning = false;
+              } 
+          }
+
+          
+
           if (moveRequested && !moving) {
             console.log('move has been requested');
             moving = true;
@@ -127,7 +149,7 @@
             let newX = (xDirection * toMove) + player.x;
             let newZ = (zDirection * toMove) + player.z;
 
-            printBelowTile(newX, newZ);
+            printBelowTile(newX, newZ, time);
        
             document.getElementById('camera-entity').setAttribute('position', newX + ' 1.6 ' + newZ);
             document.getElementById('controls').setAttribute('position', newX + ' 1.6 ' + newZ);
@@ -139,6 +161,8 @@
               moving = false;
               player.x = tileDestination.x;
               player.z = tileDestination.z;
+
+
             } 
           }
 
@@ -188,7 +212,7 @@
             
             for (tile in tiles) {
               if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
-                document.getElementById('scream').play();
+                //document.getElementById('scream').play();
                 moveRequested = true;
                 tileDestination.x = tiles[tile].x;
                 tileDestination.z = tiles[tile].z;
@@ -348,10 +372,10 @@
 
       let scene = document.getElementById('scene');
 
-      tiles.push({x: 0, z: 0, id: 'evert'});
-      tiles.push({x: 0, z: 0, id: 'arley'});
-      tiles.push({x: 0, z: 0, id: 'elmo'});
-      tiles.push({x: 0, z: 0, id: 'lils'});
+     // tiles.push({x: 0, z: 0, id: 'evert'});
+     // tiles.push({x: 0, z: 0, id: 'arley'});
+     // tiles.push({x: 0, z: 0, id: 'elmo'});
+     //  tiles.push({x: 0, z: 0, id: 'lils'});
 
       for (num in steps) {
         let step = steps[num];
