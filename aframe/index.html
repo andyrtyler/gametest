@@ -13,6 +13,7 @@
   </head>
   <body>
     <audio id="scream" src="scream.mp3" type="audio/mpeg"></audio>
+    <audio id="done" src="done.mp3" type="audio/mpeg"></audio>
     <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
    
@@ -57,6 +58,16 @@
 
       } 
 
+      function areAllTilesGone() {
+        for (num in tiles) {
+          let tile = tiles[num];
+          if (tile.status == 'live') {
+            return false;
+          }
+        }
+        return true;
+      }
+
       function getCurrentBelowTile(x, z) {
         for (num in tiles) {
           let tile = tiles[num];
@@ -77,9 +88,12 @@
         // TODO do this slowly over time rather than instantly
         let tileElem = document.getElementById(tile.id);
         if (tileElem) {
-          tile.status = 'dead';
-          tile.timeDead = time;
-          tileElem.remove();
+          if (tile.status != 'end') {
+            tile.status = 'dead';
+            tile.timeDead = time;
+            tileElem.remove();  
+          }
+          
         }
       }
 
@@ -91,12 +105,23 @@
           }
 
           if (!moving) {
-             let currentBelowTile = getCurrentBelowTile(player.x, player.z);
-              if (currentBelowTile.status == 'dead' && time > (currentBelowTile.timeDead + timeTilDead) && currentBelowTile.id != 'box0') {
+            let currentBelowTile = getCurrentBelowTile(player.x, player.z);
+            if (currentBelowTile.status == 'end') {
+              if (areAllTilesGone()) {
+                document.getElementById('done').play();
+                console.log('LEVEL COMPLETE');  
+              } else {
                 document.getElementById('scream').play();
-                console.log("GAME OVER!! at tile: " + currentBelowTile.id);
-                gameRunning = false;
-              } 
+                console.log('IMPOSSIBLE TO FINISH!');  
+              }           
+              gameRunning = false;
+            }
+            if (currentBelowTile.status == 'dead' && time > (currentBelowTile.timeDead + timeTilDead) && currentBelowTile.id != 'box0') {
+              document.getElementById('scream').play();
+              console.log("GAME OVER!! at tile: " + currentBelowTile.id);
+              gameRunning = false;
+            } 
+              
           }
 
           
@@ -338,12 +363,15 @@
         <a-camera id='camera-test'>
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-       <a-entity cursor="fuse: false; fuseTimeout: 500"
+    <!--   <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
 
-          </a-entity> 
+          </a-entity> -->
+
+
+
         </a-camera>
       </a-entity>
     </a-scene>
@@ -401,6 +429,8 @@
         aTile.setAttribute('position', position);
         scene.appendChild(aTile);
       }
+
+      tiles[14].status = 'end';
 
       
       
