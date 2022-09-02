@@ -90,6 +90,9 @@
         }
 
         tiles[14].status = 'end';
+
+        document.getElementById('camera-entity').setAttribute('position', '0 1.6 0');
+        document.getElementById('controls').setAttribute('position', '0 1.6 0');
       }
 
       function isInline(tile) {
@@ -447,7 +450,7 @@
         <a-camera id='camera-test'>
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-   <!-- <a-entity cursor="fuse: false; fuseTimeout: 500"
+  <!--  <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
