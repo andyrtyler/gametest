@@ -18,7 +18,7 @@
     <script>
    
       let timePerTile = 800;
-      let timeTilDead = 1500;  
+      let timeTilDead = 2500;  
 
       let player = {x: 0, z: 0};
       let tiles = [];
@@ -28,6 +28,69 @@
       let timeClicked;
 
       let tileDestination = {x:0, z:0};
+
+      function resetStartGame() {
+        const floorLevel = 0.5;
+
+        player = {x: 0, z: 0};
+        tiles = [];
+        moving = false;
+        gameRunning = true;
+        moveRequested = false;
+   
+
+        let steps = [
+          {x: 0, z: 0},
+          {x: 0, z: -1},
+          {x: 0, z: -2},
+          {x: 0, z: -3},
+          {x: -1, z: -3},
+          {x: -2, z: -3},
+          {x: -3, z: -3},
+          {x: -3, z: -4},
+          {x: -3, z: -5},
+          {x: -2, z: -5},
+          {x: -1, z: -5},
+          {x: -1, z: -6},
+          {x: -2, z: -6},
+          {x: -3, z: -6},
+          {x: -4, z: -6},
+        ];
+
+        let scene = document.getElementById('scene');
+
+       // tiles.push({x: 0, z: 0, id: 'evert'});
+       // tiles.push({x: 0, z: 0, id: 'arley'});
+       // tiles.push({x: 0, z: 0, id: 'elmo'});
+       //  tiles.push({x: 0, z: 0, id: 'lils'});
+
+        for (num in steps) {
+          let step = steps[num];
+          console.log('step = ' + step);
+          let id = "box" + num;
+          
+          let aTile = document.createElement('a-box');
+          aTile.setAttribute('id', id);
+          tiles.push({x: step.x, z: step.z, id: id, status: 'live'});
+          aTile.setAttribute('class', 'clickable');
+          if ((step.x + step.z) % 2 == 0) {
+            aTile.setAttribute('material', 'src: greytile.jpg;');
+          } else {
+            aTile.setAttribute('material', 'src: whitetile.jpg;');
+
+          }
+          //aTile.setAttribute('material', 'src: greytile.jpg;');
+          aTile.setAttribute('height', '0.05');
+          aTile.setAttribute('raycaster-listener', "");
+          aTile.setAttribute('cursor-listener', "");
+          const position = step.x + ' ' + floorLevel + ' ' + step.z;
+          console.log('position = ' + position);
+          aTile.setAttribute('position', position);
+          scene.appendChild(aTile);
+        }
+
+        tiles[14].status = 'end';
+      }
 
       function isInline(tile) {
          console.log("is inline?: " + tile.id + ": " + tile.x + ", " + tile.z);
@@ -237,7 +300,9 @@
             
             if (evt.target.id == 'reset') {
               console.log("START AGAIN PLEASE raycaster-listener");
-              location.reload();
+              //location.reload();
+              resetStartGame();
+              console.log("resetStart requested");
               return;
             }
 
@@ -337,7 +402,9 @@
               
       </a-entity>
       <a-sphere position="-4 0.75 -6" radius="0.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder id="reset" position="0 0.75 -4" raycaster-listener cursor-listener class="clickable" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+      <a-cylinder id="reset" position="0 0.75 -4" raycaster-listener cursor-listener class="clickable"
+        animation="property: object3D.rotation.y; to: 360; dur: 1500; loop: true"
+        material="src: restart.png;" radius="0.5" height="1.5"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
 
@@ -379,7 +446,7 @@
         <a-camera id='camera-test'>
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-   <!--  <a-entity cursor="fuse: false; fuseTimeout: 500"
+   <!-- <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
@@ -394,59 +461,7 @@
 
     <script>
       
-      const floorLevel = 0.5;
-
-      let steps = [
-        {x: 0, z: 0},
-        {x: 0, z: -1},
-        {x: 0, z: -2},
-        {x: 0, z: -3},
-        {x: -1, z: -3},
-        {x: -2, z: -3},
-        {x: -3, z: -3},
-        {x: -3, z: -4},
-        {x: -3, z: -5},
-        {x: -2, z: -5},
-        {x: -1, z: -5},
-        {x: -1, z: -6},
-        {x: -2, z: -6},
-        {x: -3, z: -6},
-        {x: -4, z: -6},
-      ];
-
-      let scene = document.getElementById('scene');
-
-     // tiles.push({x: 0, z: 0, id: 'evert'});
-     // tiles.push({x: 0, z: 0, id: 'arley'});
-     // tiles.push({x: 0, z: 0, id: 'elmo'});
-     //  tiles.push({x: 0, z: 0, id: 'lils'});
-
-      for (num in steps) {
-        let step = steps[num];
-        console.log('step = ' + step);
-        let id = "box" + num;
-        
-        let aTile = document.createElement('a-box');
-        aTile.setAttribute('id', id);
-        tiles.push({x: step.x, z: step.z, id: id, status: 'live'});
-        aTile.setAttribute('class', 'clickable');
-        if ((step.x + step.z) % 2 == 0) {
-          aTile.setAttribute('material', 'src: greytile.jpg;');
-        } else {
-          aTile.setAttribute('material', 'src: whitetile.jpg;');
-
-        }
-        //aTile.setAttribute('material', 'src: greytile.jpg;');
-        aTile.setAttribute('height', '0.05');
-        aTile.setAttribute('raycaster-listener', "");
-        aTile.setAttribute('cursor-listener', "");
-        const position = step.x + ' ' + floorLevel + ' ' + step.z;
-        console.log('position = ' + position);
-        aTile.setAttribute('position', position);
-        scene.appendChild(aTile);
-      }
-
-      tiles[14].status = 'end';
+      resetStartGame();
 
       
       
