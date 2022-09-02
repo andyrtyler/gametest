@@ -302,7 +302,7 @@
               console.log("START AGAIN PLEASE raycaster-listener");
               //location.reload();
               resetStartGame();
-              console.log("resetStart requested");
+              console.log("resetStart requested raycaster-listener");
               return;
             }
 
@@ -355,8 +355,9 @@
 
       if (evt.target.id == 'reset') {
         console.log("START AGAIN PLEASE cursor-listener");
-        location.reload();
-        return;
+        resetStartGame();
+              console.log("resetStart requested cursor-listener");
+              return;
       }
       console.log('cursor-listener click');
      // document.getElementById('snare').play();
