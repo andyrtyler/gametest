@@ -383,7 +383,8 @@
     </script>
     <a-scene id="scene" updater>
 
-      <a-entity id='controls' position="0 1.6 0">      
+      <a-entity id='controls' position="0 1.6 0"> 
+         <!-- <a-box scale="2 2 0.1" color="#6DD"></a-box>  -->   
           <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
         
     
@@ -428,6 +429,8 @@
       animation="property: object3D.position.y; to: 3; dir: alternate; dur: 500; loop: true"
       animation="property: object3D.rotation.y; to: 0.8; dir: alternate; dur: 500; loop: true"></a-box>
 
+      <a-box id="menu" scale="1 1 0.1" material="src: menu.png;" position="0 3.3 -1"></a-box>
+
      
      <!-- 
       <a-box class="clickable" id="abox1" raycaster-listener cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
@@ -448,14 +451,15 @@
 -->
       <a-entity id='camera-entity' position="0 1.6 0">
         <a-camera id='camera-test'>
+
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-  <!--  <a-entity cursor="fuse: false; fuseTimeout: 500"
+    <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
 
-          </a-entity>  -->
+          </a-entity>  
 
 
 
