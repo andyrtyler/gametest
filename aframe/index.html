@@ -19,15 +19,18 @@
    
       let timePerTile = 800;
       let timeTilDead = 2500;  
+      let fallingSpeed = 0.006; // Units per millisecond
+      let fallingTime = 4000; // Number of milliseconds to fall for
 
       let player = {x: 0, z: 0};
       let tiles = [];
       let moving = false;
-      let gameStarted = false;
       let gameRunning = true;
       let moveRequested = false;
       let timeClicked;
       let menuElement;
+      let falling = false;
+      let fallingStartedTime;
 
       let tileDestination = {x:0, z:0};
 
@@ -46,8 +49,8 @@
         moving = false;
         gameRunning = false;
         moveRequested = false;
+        falling = false;       
    
-
         let steps = [
           {x: 0, z: 0},
           {x: 0, z: -1},
@@ -172,29 +175,68 @@
         }
       }
 
+      function die(time) {
+        fallingStartedTime = time;
+        document.getElementById('scream').play();
+        console.log('Fell off map!');  
+        gameRunning = false;
+
+        // Start animation of falling for x amount of seconds. 
+        falling = true;
+      }
+
+      function cannotFinish() {
+        document.getElementById('scream').play();
+        console.log('IMPOSSIBLE TO FINISH!');  
+        gameRunning = false;
+      }
+
+      function levelComplete() {
+        document.getElementById('done').play();
+        console.log('LEVEL COMPLETE'); 
+        gameRunning = false;
+      }
+
       AFRAME.registerComponent('updater', {
 
         tick: function(time, timeDelta) {
+          if (falling) {
+            console.log("falling");
+ 
+            let ticksSinceDeath = time - fallingStartedTime;
+            let howMuchToMove = ticksSinceDeath * fallingSpeed;
+            let newY = 1.6 - howMuchToMove;
+
+            document.getElementById('camera-entity').setAttribute('position', player.x + ' ' + newY + ' ' + player.z);
+            document.getElementById('controls').setAttribute('position', player.x + ' ' + newY + ' ' + player.z);
+
+            if (time - fallingStartedTime >= fallingTime) {
+              console.log("end the fucking falling");
+              resetStartGame();
+            }
+          }
+
           if (!gameRunning) {
             return;
           }
+
+
 
           if (!moving) {
             let currentBelowTile = getCurrentBelowTile(player.x, player.z);
             if (currentBelowTile.status == 'end') {
               if (areAllTilesGone()) {
-                document.getElementById('done').play();
-                console.log('LEVEL COMPLETE');  
+                 levelComplete();
+                 return;
               } else {
-                document.getElementById('scream').play();
-                console.log('IMPOSSIBLE TO FINISH!');  
+                cannotFinish();
+                return;
               }           
-              gameRunning = false;
+              
             }
             if (currentBelowTile.status == 'dead' && time > (currentBelowTile.timeDead + timeTilDead) && currentBelowTile.id != 'box0') {
-              document.getElementById('scream').play();
-              console.log("GAME OVER!! at tile: " + currentBelowTile.id);
-              gameRunning = false;
+              die(time);
+              return;
             } 
               
           }
@@ -472,12 +514,12 @@
 
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-   <!-- <a-entity cursor="fuse: false; fuseTimeout: 500"
+    <a-entity cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
 
-          </a-entity>  -->
+          </a-entity>  
 
 
 
