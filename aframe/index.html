@@ -18,11 +18,16 @@
     <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
    
+      // --- Constants ----
       let timePerTile = 800;
       let timeTilDead = 2500;  
       let fallingSpeed = 0.006; // Units per millisecond
       let fallingTime = 4000; // Number of milliseconds to fall for
+      // -------------------
 
+
+      // --- Current status ---
+      let currentLevel = 1;
       let player = {x: 0, z: 0};
       let tiles = [];
       let moving = false;
@@ -31,19 +36,36 @@
       let timeClicked;
       let menuElement;
       let falling = false;
-      let fallingStartedTime;
-
+      let fallingStartedTime;     
       let tileDestination = {x:0, z:0};
+      // -----------------------
 
       function startGame() {
         gameRunning = true;
         document.getElementById('menu').setAttribute('material', 'opacity: 0.0;');
       }
 
+      function goToNextLevel() {
+        // First, make sure everything is gone
+        // Remove the last tile because thats not removed.
+
+        let tileElem = document.getElementById(tiles[tiles.length - 1].id);
+        tileElem.remove();
+
+        currentLevel++;
+
+        // Then, restart game
+        resetStartGame();
+      }
+
       function resetStartGame() {
+
+        if (currentLevel > 2) currentLevel = 1;
+
+        document.getElementById('menu').setAttribute('text', 'value', 'Level ' + currentLevel + '  Press Here To Start');
         const floorLevel = 0.5;
 
-        document.getElementById('menu').setAttribute('material', 'opacity: 1;');
+        document.getElementById('menu').setAttribute('material', 'opacity: 0.8;');
 
         player = {x: 0, z: 0};
         tiles = [];
@@ -52,23 +74,38 @@
         moveRequested = false;
         falling = false;       
    
-        let steps = [
-          {x: 0, z: 0},
-          {x: 0, z: -1},
-          {x: 0, z: -2},
-          {x: 0, z: -3},
-          {x: -1, z: -3},
-          {x: -2, z: -3},
-          {x: -3, z: -3},
-          {x: -3, z: -4},
-          {x: -3, z: -5},
-          {x: -2, z: -5},
-          {x: -1, z: -5},
-          {x: -1, z: -6},
-          {x: -2, z: -6},
-          {x: -3, z: -6},
-          {x: -4, z: -6},
-        ];
+        let steps;
+
+        if (currentLevel === 2) {
+           steps = [
+            {x: 0, z: 0},
+            {x: 0, z: -1},
+            {x: 0, z: -2},
+            {x: 0, z: -3},
+            {x: -1, z: -3},
+            {x: -2, z: -3},
+            {x: -3, z: -3},
+            {x: -3, z: -4},
+            {x: -3, z: -5},
+            {x: -2, z: -5},
+            {x: -1, z: -5},
+            {x: -1, z: -6},
+            {x: -2, z: -6},
+            {x: -3, z: -6},
+            {x: -4, z: -6},
+          ];
+        } 
+
+        if (currentLevel === 1) {
+          steps = [
+            {x: 0, z: 0},
+            {x: 0, z: -1},
+            {x: 0, z: -2},
+            {x: -1, z: -2}, 
+          ];           
+        }
+
+      
 
         let scene = document.getElementById('scene');
 
@@ -99,10 +136,22 @@
           const position = step.x + ' ' + floorLevel + ' ' + step.z;
           console.log('position = ' + position);
           aTile.setAttribute('position', position);
+
+        
+
           scene.appendChild(aTile);
+
+
         }
 
-        tiles[14].status = 'end';
+
+        console.log("Reset game: Number of tiles for level " + currentLevel + " = " + tiles.length);
+
+        let endTile = tiles[tiles.length - 1];
+        endTile.status = 'end';
+        let endStep = steps[steps.length - 1];
+        document.getElementById('end-sphere').setAttribute('position', endStep.x + ' 0.75 ' + endStep.z);
+        
 
         document.getElementById('camera-entity').setAttribute('position', '0 1.6 0');
         document.getElementById('controls').setAttribute('position', '0 1.6 0');
@@ -193,9 +242,11 @@
       }
 
       function levelComplete() {
+
         document.getElementById('done').play();
         console.log('LEVEL COMPLETE'); 
         gameRunning = false;
+        goToNextLevel();
       }
 
       AFRAME.registerComponent('updater', {
@@ -467,7 +518,7 @@
                repeat="indefinite"></a-animation>
               
       </a-entity>
-      <a-sphere position="-4 0.75 -6" radius="0.25" color="#EF2D5E"></a-sphere>
+      <a-sphere id="end-sphere" position="-4 0.75 -6" radius="0.25" color="#EF2D5E"></a-sphere>
       <a-cylinder id="reset" position="0 0.75 -4" raycaster-listener cursor-listener class="clickable"
         animation="property: object3D.rotation.y; to: 360; dur: 1500; loop: true"
         material="src: restart.png;" radius="0.5" height="1.5"></a-cylinder>
@@ -525,7 +576,7 @@
         <a-camera id='camera-test'>
 
         
-   <!-- TODO  Put this back in to get the gaze pointer thing. -->
+   
     <a-entity id="retical" cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
