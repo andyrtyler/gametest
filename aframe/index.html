@@ -515,7 +515,7 @@
 
         
    <!-- TODO  Put this back in to get the gaze pointer thing. -->
-    <a-entity cursor="fuse: false; fuseTimeout: 500"
+    <a-entity id="retical" cursor="fuse: false; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.028"
             material="color: black; shader: flat"> 
@@ -532,6 +532,9 @@
       
       resetStartGame();
 
+      if (navigator.userAgent.toLowerCase().includes('oculus')) {
+        document.getElementById('retical').remove();
+      }
       
       
     </script>
