@@ -83,14 +83,19 @@
 
       // -------------
 
+      function removeAllCurrentLevelTiles() {
+        console.log('removeAllCurrentLevelTiles\. tiles length ' + tiles.length);
+        for (tile in tiles) {
+          console.log('removing tile with id ' + tiles[tile].id);
+          let tileElem = document.getElementById(tiles[tile].id);
+          if (tileElem) tileElem.remove();  
+        }
+      }
+
 
       function goToNextLevel() {
-        // First, make sure everything is gone
-        // Remove the last tile because thats not removed.
-
-        let tileElem = document.getElementById(tiles[tiles.length - 1].id);
-        tileElem.remove();
-
+        removeAllCurrentLevelTiles();
+        
         currentLevel++;
 
         // Then, restart game
@@ -167,10 +172,10 @@
       }
 
       function isInline(tile) {
-         console.log("is inline?: " + tile.id + ": " + tile.x + ", " + tile.z);
+        // console.log("is inline?: " + tile.id + ": " + tile.x + ", " + tile.z);
          // TODO: Update this to take into account whether there is actually tiles all the way up to the destination tile.  
          if (player.x === tile.x || player.z === tile.z) {
-          console.log('this is inline');
+     //     console.log('this is inline');
           return true;
          }
          return false;
@@ -187,8 +192,8 @@
         
 
           if (x > minX && x < maxX && z > minZ && z < maxZ) {
-            console.log('Current below tile num = ' + num);
-            console.log('Current below tile id = ' + tile.id);
+         //   console.log('Current below tile num = ' + num);
+      //      console.log('Current below tile id = ' + tile.id);
             removeTile(tile, time);
           }
         }
@@ -272,6 +277,7 @@
 
             if (time - fallingStartedTime >= fallingTime) {
               console.log("end the fucking falling");
+              removeAllCurrentLevelTiles();
               resetStartGame();
             }
           }
@@ -362,7 +368,7 @@
       AFRAME.registerComponent('raycaster-listener', {
         init: function() {
           this.el.addEventListener('raycaster-intersected', function(evt) {
-            console.log('intersected element with id: ' + evt.target.id);
+            //console.log('intersected element with id: ' + evt.target.id);
             
             for (tile in tiles) {
               if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
@@ -376,7 +382,7 @@
           });
 
           this.el.addEventListener('raycaster-intersected-cleared', function(evt) {
-            console.log('intersect cleared element with id: ' + evt.target.id);
+          //  console.log('intersect cleared element with id: ' + evt.target.id);
            // this.el.removeAttribute('material', 'color');
              for (tile in tiles) {
               if (evt.target.id == tiles[tile].id) {
