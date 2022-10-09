@@ -14,7 +14,7 @@
   </head>
   <body>
     <audio id="scream" src="scream.mp3" type="audio/mpeg"></audio>
-    <audio id="done" src="done.mp3" type="audio/mpeg"></audio>
+    <audio id="done" src="levelcomplete.wav" type="audio/wav"></audio>
     <audio id="snare" src="snare.wav" type="audio/wav"></audio>
     <script>
    
@@ -83,10 +83,6 @@
 
       // -------------
 
-      function startGame() {
-        gameRunning = true;
-        document.getElementById('menu').setAttribute('material', 'opacity: 0.0;');
-      }
 
       function goToNextLevel() {
         // First, make sure everything is gone
@@ -103,16 +99,16 @@
 
       function resetStartGame() {
 
-
+        // Go back to the first level if youve got to the end.
         if (currentLevel > levels.length - 1) currentLevel = 0;
 
-        document.getElementById('menu').setAttribute('text', 'value', 'Level ' + levels[currentLevel].name + '  Press Here To Start');       
-        document.getElementById('menu').setAttribute('material', 'opacity: 0.8;');
+        document.getElementById('menu').setAttribute('text', 'value', 'Level ' + levels[currentLevel].name);       
+        document.getElementById('menu').setAttribute('material', 'opacity: 0.0;');
 
         player = {x: 0, z: 0};
         tiles = [];
         moving = false;
-        gameRunning = false;
+        gameRunning = true;
         moveRequested = false;
         falling = false;  
 
@@ -135,10 +131,13 @@
           }
 
           
+          let color;
           if (step.type === 'START') {
             aTile.setAttribute('material', 'color', 'green');
+            color = 'green';
           } else if (step.type === 'END') {
             aTile.setAttribute('material', 'color', 'red');
+            color = 'red';
           } else {
             if ((step.x + step.z) % 2 == 0) {
               aTile.setAttribute('material', 'src: greytile.jpg;');
@@ -156,9 +155,9 @@
 
           if (step.type === 'END') {
             document.getElementById('end-sphere').setAttribute('position', step.x + ' 0.75 ' + step.z);
-            tiles.push({x: step.x, z: step.z, id: id, status: 'end'});
+            tiles.push({x: step.x, z: step.z, id: id, status: 'end', color: color});
           } else {
-            tiles.push({x: step.x, z: step.z, id: id, status: 'live'});
+            tiles.push({x: step.x, z: step.z, id: id, status: 'live', color: color});
           }
 
         }
@@ -281,8 +280,6 @@
             return;
           }
 
-
-
           if (!moving) {
             let currentBelowTile = getCurrentBelowTile(player.x, player.z);
             if (currentBelowTile.status == 'end') {
@@ -301,8 +298,7 @@
             } 
               
           }
-
-          
+         
 
           if (moveRequested && !moving) {
             console.log('move has been requested');
@@ -339,16 +335,8 @@
             }
 
             let xSpeed = (tileDestination.x - player.x) * xDirection;
-
             let zSpeed = (tileDestination.z - player.z) * zDirection;
-            //console.log('xspeed = ' + xSpeed + ', zspeed='  + zSpeed+ ', zDirection=' + zDirection);
-
-           // let newX = ((tileDestination.x - player.x) * toMove) + player.x;
-           // let newZ = ((tileDestination.z - player.z) * toMove) + player.z;
-
-         //  let newX = (xDirection * speed * diff )  + player.x;
-         //  let newZ = (zDirection * speed * diff )  + player.z;
-
+  
             let newX = (xDirection * toMove) + player.x;
             let newZ = (zDirection * toMove) + player.z;
 
@@ -364,17 +352,8 @@
               moving = false;
               player.x = tileDestination.x;
               player.z = tileDestination.z;
-
-
             } 
           }
-
-        /*  if (moving && time > timeClicked + 1000 ) {
-
-            console.log('do a move');
-            
-            moving = false;
-          }*/
           
         }
       });
@@ -401,7 +380,12 @@
            // this.el.removeAttribute('material', 'color');
              for (tile in tiles) {
               if (evt.target.id == tiles[tile].id) {
-                document.getElementById(tiles[tile].id).removeAttribute('material', 'color');
+                if (tiles[tile].color) {
+                  document.getElementById(tiles[tile].id).setAttribute('material', 'color', tiles[tile].color);
+                } else {
+                  document.getElementById(tiles[tile].id).removeAttribute('material', 'color');  
+                }
+                
                 
               } else {
                 
@@ -420,11 +404,7 @@
               console.log("resetStart requested raycaster-listener");
               return;
             }
-
-            if (evt.target.id == 'menu') {
-              console.log("Game start requested");
-              startGame();
-            }
+           
 
             if (!gameRunning) {
               return;
@@ -556,7 +536,7 @@
 
    
       <a-entity
-      raycaster-listener class="clickable" 
+      
     id="menu"
     position="0 2.8 -1.1"
     geometry="primitive: plane; width: 2; height:auto"
