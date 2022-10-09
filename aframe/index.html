@@ -19,17 +19,19 @@
     <script>
    
       // --- Constants ----
-      let timePerTile = 800;
-      let timeTilDead = 2500;  
-      let fallingSpeed = 0.006; // Units per millisecond
-      let fallingTime = 4000; // Number of milliseconds to fall for
+      const timePerTile = 800;
+      const timeTilDead = 2500;  
+      const fallingSpeed = 0.006; // Units per millisecond
+      const fallingTime = 4000; // Number of milliseconds to fall for
+      const floorLevel = 0.5;
+      const tileHeight = 0.05;
       // -------------------
 
 
       // --- Current status ---
-      let currentLevel = 1;
+      let currentLevel = 0;
       let player = {x: 0, z: 0};
-      let tiles = [];
+      let tiles = []; // the tiles and their current states
       let moving = false;
       let gameRunning = true;
       let moveRequested = false;
@@ -39,6 +41,47 @@
       let fallingStartedTime;     
       let tileDestination = {x:0, z:0};
       // -----------------------
+
+      // --- Levels ---
+      let levels = [
+          {name: '1-1',
+           steps: 
+          [ 
+            {x: 0, z: 0, type: 'START'},
+            {x: 0, z: -1, type: 'ONE'},
+            {x: 0, z: -2, type: 'ONE'},
+            {x: 0, z: -3, type: 'END'}, 
+          ]},
+          {name: '1-2',
+           steps: 
+          [ 
+            {x: 0, z: 0, type: 'START'},
+            {x: -1, z: 0, type: 'ONE'},
+            {x: -2, z: 0, type: 'ONE'},
+            {x: -2, z: -1, type: 'END'}, 
+          ]},
+          {name: '1-3',
+           steps: 
+          [
+            {x: 0, z: 0, type: 'START'},
+            {x: 0, z: -1, type: 'ONE'},
+            {x: 0, z: -2, type: 'ONE'},
+            {x: 0, z: -3, type: 'ONE'},
+            {x: -1, z: -3, type: 'ONE'},
+            {x: -2, z: -3, type: 'ONE'},
+            {x: -3, z: -3, type: 'ONE'},
+            {x: -3, z: -4, type: 'ONE'},
+            {x: -3, z: -5, type: 'ONE'},
+            {x: -2, z: -5, type: 'ONE'},
+            {x: -1, z: -5, type: 'ONE'},
+            {x: -1, z: -6, type: 'ONE'},
+            {x: -2, z: -6, type: 'ONE'},
+            {x: -3, z: -6, type: 'ONE'},
+            {x: -4, z: -6, type: 'END'},
+          ]}
+        ];
+
+      // -------------
 
       function startGame() {
         gameRunning = true;
@@ -60,11 +103,11 @@
 
       function resetStartGame() {
 
-        if (currentLevel > 2) currentLevel = 1;
+        
 
-        document.getElementById('menu').setAttribute('text', 'value', 'Level ' + currentLevel + '  Press Here To Start');
-        const floorLevel = 0.5;
+        if (currentLevel > levels.length - 1) currentLevel = 0;
 
+        document.getElementById('menu').setAttribute('text', 'value', 'Level ' + levels[currentLevel].name + '  Press Here To Start');       
         document.getElementById('menu').setAttribute('material', 'opacity: 0.8;');
 
         player = {x: 0, z: 0};
@@ -72,87 +115,56 @@
         moving = false;
         gameRunning = false;
         moveRequested = false;
-        falling = false;       
-   
-        let steps;
-
-        if (currentLevel === 2) {
-           steps = [
-            {x: 0, z: 0},
-            {x: 0, z: -1},
-            {x: 0, z: -2},
-            {x: 0, z: -3},
-            {x: -1, z: -3},
-            {x: -2, z: -3},
-            {x: -3, z: -3},
-            {x: -3, z: -4},
-            {x: -3, z: -5},
-            {x: -2, z: -5},
-            {x: -1, z: -5},
-            {x: -1, z: -6},
-            {x: -2, z: -6},
-            {x: -3, z: -6},
-            {x: -4, z: -6},
-          ];
-        } 
-
-        if (currentLevel === 1) {
-          steps = [
-            {x: 0, z: 0},
-            {x: 0, z: -1},
-            {x: 0, z: -2},
-            {x: -1, z: -2}, 
-          ];           
-        }
-
+        falling = false;               
       
 
         let scene = document.getElementById('scene');
 
-       // tiles.push({x: 0, z: 0, id: 'evert'});
-       // tiles.push({x: 0, z: 0, id: 'arley'});
-       // tiles.push({x: 0, z: 0, id: 'elmo'});
-       //  tiles.push({x: 0, z: 0, id: 'lils'});
+        let steps = levels[currentLevel].steps;
 
         for (num in steps) {
           let step = steps[num];
-          console.log('step = ' + step);
           let id = "box" + num;
           
           let aTile = document.createElement('a-box');
           aTile.setAttribute('id', id);
-          tiles.push({x: step.x, z: step.z, id: id, status: 'live'});
-          aTile.setAttribute('class', 'clickable');
-          if ((step.x + step.z) % 2 == 0) {
-            aTile.setAttribute('material', 'src: greytile.jpg;');
-          } else {
-            aTile.setAttribute('material', 'src: whitetile.jpg;');
+          
 
+          if (step.type != 'START') {
+            aTile.setAttribute('class', 'clickable'); 
+            aTile.setAttribute('raycaster-listener', "");
+            aTile.setAttribute('cursor-listener', ""); 
           }
-          //aTile.setAttribute('material', 'src: greytile.jpg;');
-          aTile.setAttribute('height', '0.05');
-          aTile.setAttribute('raycaster-listener', "");
-          aTile.setAttribute('cursor-listener', "");
-          const position = step.x + ' ' + floorLevel + ' ' + step.z;
-          console.log('position = ' + position);
-          aTile.setAttribute('position', position);
 
-        
+          
+          if (step.type === 'START') {
+            aTile.setAttribute('material', 'color', 'green');
+          } else if (step.type === 'END') {
+            aTile.setAttribute('material', 'color', 'red');
+          } else {
+            if ((step.x + step.z) % 2 == 0) {
+              aTile.setAttribute('material', 'src: greytile.jpg;');
+            } else {
+              aTile.setAttribute('material', 'src: whitetile.jpg;');
+            }
+          }
+          
+          
 
+          aTile.setAttribute('height', tileHeight);
+          aTile.setAttribute('position', step.x + ' ' + floorLevel + ' ' + step.z);
+     
           scene.appendChild(aTile);
 
+          if (step.type === 'END') {
+            document.getElementById('end-sphere').setAttribute('position', step.x + ' 0.75 ' + step.z);
+            tiles.push({x: step.x, z: step.z, id: id, status: 'end'});
+          } else {
+            tiles.push({x: step.x, z: step.z, id: id, status: 'live'});
+          }
 
         }
-
-
-        console.log("Reset game: Number of tiles for level " + currentLevel + " = " + tiles.length);
-
-        let endTile = tiles[tiles.length - 1];
-        endTile.status = 'end';
-        let endStep = steps[steps.length - 1];
-        document.getElementById('end-sphere').setAttribute('position', endStep.x + ' 0.75 ' + endStep.z);
         
-
         document.getElementById('camera-entity').setAttribute('position', '0 1.6 0');
         document.getElementById('controls').setAttribute('position', '0 1.6 0');
       }
@@ -242,7 +254,6 @@
       }
 
       function levelComplete() {
-
         document.getElementById('done').play();
         console.log('LEVEL COMPLETE'); 
         gameRunning = false;
@@ -375,7 +386,7 @@
         init: function() {
           this.el.addEventListener('raycaster-intersected', function(evt) {
             console.log('intersected element with id: ' + evt.target.id);
-            //this.el.setAttribute('material', 'color', 'blue');
+            
             for (tile in tiles) {
               if (evt.target.id == tiles[tile].id && isInline(tiles[tile])) {
                 document.getElementById(tiles[tile].id).setAttribute('material', 'color', 'blue');
@@ -435,6 +446,8 @@
         }
       });
 
+
+/*
       // This listens to the retical when you are viewing the page on desktop (and presumably on Android web aswell)
       AFRAME.registerComponent('cursor-listener', {
   init: function () {
@@ -490,8 +503,10 @@
 
       
     });
+
+    
   }
-});
+});   */
     </script>
     <a-scene id="scene" updater>
 
@@ -519,7 +534,7 @@
               
       </a-entity>
       <a-sphere id="end-sphere" position="-4 0.75 -6" radius="0.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder id="reset" position="0 0.75 -4" raycaster-listener cursor-listener class="clickable"
+      <a-cylinder id="reset" position="1 0.75 -4" raycaster-listener cursor-listener class="clickable"
         animation="property: object3D.rotation.y; to: 360; dur: 1500; loop: true"
         material="src: restart.png;" radius="0.5" height="1.5"></a-cylinder>
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
@@ -554,24 +569,6 @@
         value: Level: 1-1  Press Here To Start"
     ></a-entity>
 
-     
-     <!-- 
-      <a-box class="clickable" id="abox1" raycaster-listener cursor-listener position="0 0.5 0" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox2" raycaster-listener cursor-listener position="0 0.5 -1" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox3" raycaster-listener cursor-listener position="0 0.5 -2" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox4" raycaster-listener cursor-listener position="0 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox5" raycaster-listener cursor-listener position="-1 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox6" raycaster-listener cursor-listener position="-2 0.5 -3" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox7" raycaster-listener cursor-listener position="-3 0.5 -3" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox8" raycaster-listener cursor-listener position="-3 0.5 -4" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox9" raycaster-listener cursor-listener position="-3 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox10" raycaster-listener cursor-listener position="-2 0.5 -5" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox11" raycaster-listener cursor-listener position="-1 0.5 -5" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox12" raycaster-listener cursor-listener position="-1 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox13" raycaster-listener cursor-listener position="-2 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
-      <a-box class="clickable" id="abox14" raycaster-listener cursor-listener position="-3 0.5 -6" height="0.05" material="src: whitetile.jpg;"></a-box>
-      <a-box class="clickable" id="abox15" raycaster-listener cursor-listener position="-4 0.5 -6" height="0.05" material="src: greytile.jpg;"></a-box>
--->
       <a-entity id='camera-entity' position="0 1.6 0">
         <a-camera id='camera-test'>
 
